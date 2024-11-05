@@ -68,6 +68,11 @@ io.on("connection", (socket) => {
   });
 });
 
+//testing route
+app.get("/", (_req, res) => {
+  res.json({ message: "Backend server is running!" });
+});
+
 // Use routers
 app.use("/api/user", userRouter);
 app.use("/api/auth", authRouter);
@@ -75,6 +80,7 @@ app.use("/api/fabric", fabricRouter);
 app.use("/api/message", messageRouter);
 app.use("/api/conversation", conversationRouter);
 app.use("/api/supply", supplyRouter);
+
 
 // Global error handler
 app.use((err, req, res, next) => {
