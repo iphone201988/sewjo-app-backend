@@ -9,8 +9,12 @@ import fabricRouter from "./routes/fabric.route.js";
 import messageRouter from "./routes/message.route.js";
 import conversationRouter from "./routes/conversation.route.js";
 import supplyRouter from "./routes/supply.route.js"; // Import the supply router
+import uploadRoute from "./routes/upload.route.js"
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import path from 'path';
+import { fileURLToPath } from 'url';
+
 
 dotenv.config();
 
@@ -73,6 +77,12 @@ app.get("/", (_req, res) => {
   res.json({ message: "Backend server is running!" });
 });
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+app.use("/image", express.static(path.join(__dirname, "view/image")));
+
+
 // Use routers
 app.use("/api/user", userRouter);
 app.use("/api/auth", authRouter);
@@ -80,6 +90,7 @@ app.use("/api/fabric", fabricRouter);
 app.use("/api/message", messageRouter);
 app.use("/api/conversation", conversationRouter);
 app.use("/api/supply", supplyRouter);
+app.use("/api/upload", uploadRoute);
 
 
 // Global error handler
