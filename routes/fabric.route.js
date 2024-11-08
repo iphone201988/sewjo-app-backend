@@ -13,6 +13,7 @@
 import express from "express";
 import {
   createFabricStash,
+  deleteFabric,
   getAllFabric,
   getFabricDetails,
   updateFabricDetails,
@@ -25,5 +26,7 @@ router.post("/add", createFabricStash);
 router.get("/getFabric", getAllFabric);
 router.get("/getFabric/:id", getFabricDetails);
 router.put("/:id", updateFabricDetails);
+router.delete("/:id",deleteFabric);
+
 export default router;
 

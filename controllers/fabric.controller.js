@@ -51,3 +51,19 @@ export const updateFabricDetails = async (req, res, next) => {
     next(error);
   }
 };
+export const deleteFabric = async (req, res, next) => {
+  try {
+    const id = req.params.id;
+    const fabric = await Fabric.findById(id);
+    if (!fabric) {
+      return next(errorHandler(404, "Fabric not found!"));
+    }
+    await Fabric.findByIdAndDelete(id);
+    res.status(200).json({
+      succccess: true,
+      message: "Fabric deleted successfully!",
+    });
+  } catch (error) {
+    next(error);
+  }
+};
