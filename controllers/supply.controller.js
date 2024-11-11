@@ -103,3 +103,20 @@ export const updateSupplyDetails = async (req, res, next) => {
     next(error);
   }
 };
+
+export const deleteSupply = async (req, res , next) => {
+    try {
+        const id = req.params.id;
+        const supply = await Supply.findById(id);
+        if (!supply) {
+          return next(errorHandler(404, "supply not found!"));
+        }
+        await Supply.findByIdAndDelete(id);
+        res.status(200).json({
+          succccess: true,
+          message: "Supply deleted successfully!",
+        });
+      } catch (error) {
+        next(error);
+      }
+}
