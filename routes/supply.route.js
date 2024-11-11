@@ -10,6 +10,6 @@ router.get('/getSupply', getAllSupplies);
 
 router.get('/getSupply/:id', getSupplyDetails);
 
-router.put('/:id', verifyToken, updateSupplyDetails);
+router.put('/:id', /* verifyToken,  */updateSupplyDetails);
 
 export default router;
