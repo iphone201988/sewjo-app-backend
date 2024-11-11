@@ -8,7 +8,7 @@ const supplySchema = new mongoose.Schema({
     color: { type: String, default: "" },
     quantity: { type: Number, default: 1 },
     brands: { type: [String], default: [] },
-    price: { type: String, default: "" }, // Change to Number if you want to store as numeric
+    price: { type: String, default: "" },
     currency: { type: String, default: "CAD" },
     tags: { type: [String], default: [] },
     notes: { type: String, default: "" },

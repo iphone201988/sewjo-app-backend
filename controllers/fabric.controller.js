@@ -43,7 +43,10 @@ export const updateFabricDetails = async (req, res, next) => {
   try {
     const updatedFabric = await Fabric.findByIdAndUpdate(
       req.params.id,
-      req.body,
+      {
+        ...fabric,
+        ...req.body,
+      },
       { new: true }
     );
     res.status(200).json(updatedFabric);
