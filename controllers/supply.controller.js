@@ -37,7 +37,8 @@ export const getAllSupplies = async (req, res, next) => {
 // Update Supply Details
 export const updateSupplyDetails = async (req, res, next) => {
   try {
-    console.log("params",req.params.id);
+    console.log("params", req.params.id);
+
     const supply = await Supply.findById(req.params.id);
     if (!supply) {
       return next(errorHandler(404, "Supply not found!"));
@@ -55,6 +56,8 @@ export const updateSupplyDetails = async (req, res, next) => {
       },
       { new: true }
     );
+    console.log("supply", supply);
+    console.log("supply updated", updatedSupply);
     return res.status(200).json(updatedSupply);
   } catch (error) {
     next(error);
