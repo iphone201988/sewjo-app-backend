@@ -86,6 +86,15 @@ const fabricSchema = new mongoose.Schema(
       // require:true
     },
 
+    lengthValue: {
+      type: String,
+      // require:true
+    },
+    widthValue: {
+      type: String,
+      // require:true
+    },
+
     shrinkage: {
       type: String,
       // require:true

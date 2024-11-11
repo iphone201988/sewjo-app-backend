@@ -41,7 +41,7 @@ export const updateFabricDetails = async (req, res, next) => {
     widthType,
     weight,
     weightType,
-    colour,
+    color,
     price,
     imageUrls,
     userRef,
@@ -65,6 +65,8 @@ export const updateFabricDetails = async (req, res, next) => {
     note,
     tags,
     fabricContent,
+    lengthValue,
+    widthValue,
   } = req.body;
   if (!fabric) {
     return next(errorHandler(404, "Fabric not found!"));
@@ -95,8 +97,8 @@ export const updateFabricDetails = async (req, res, next) => {
   if (weightType) {
     fabric.weightType = weightType;
   }
-  if (colour) {
-    fabric.colour = colour;
+  if (color) {
+    fabric.color = color;
   }
   if (price) {
     fabric.price = price;
@@ -167,6 +169,13 @@ export const updateFabricDetails = async (req, res, next) => {
   if (fabricContent) {
     fabric.fabricContent = fabricContent;
   }
+  if (lengthValue) {
+    fabric.lengthValue = lengthValue;
+  }
+  if (widthValue) {
+    fabric.widthValue = widthValue;
+  }
+  
   try {
     await fabric.save();
     res.status(200).json({
