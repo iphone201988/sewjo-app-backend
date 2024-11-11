@@ -29,7 +29,7 @@ const fabricSchema = new mongoose.Schema(
     weightType: {
       type: String,
     },
-    colour: {
+    color: {
       type: String,
       //   required: true,
     },
