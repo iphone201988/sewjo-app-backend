@@ -56,6 +56,7 @@ export const updateSupplyDetails = async (req, res, next) => {
       },
       { new: true }
     );
+    console.log("req body",req.body);
     console.log("supply", supply);
     console.log("supply updated", updatedSupply);
     return res.status(200).json(updatedSupply);
