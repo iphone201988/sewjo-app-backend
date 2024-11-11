@@ -99,7 +99,7 @@ const fabricSchema = new mongoose.Schema(
       type: String,
       // require:true
     },
-    Drape: {
+    drape: {
       type: String,
       // require:true
     },
@@ -107,7 +107,7 @@ const fabricSchema = new mongoose.Schema(
       type: String,
       // require:true
     },
-    shop: {
+    shope: {
       type: String,
       // require:true
     },

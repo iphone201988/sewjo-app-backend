@@ -56,7 +56,7 @@ export const updateFabricDetails = async (req, res, next) => {
     stretchWidth,
     stretchLength,
     shrinkage,
-    Drape,
+    drape,
     imperfection,
     shop,
     currencyType,
@@ -142,14 +142,14 @@ export const updateFabricDetails = async (req, res, next) => {
   if (shrinkage) {
     fabric.shrinkage = shrinkage;
   }
-  if (Drape) {
-    fabric.Drape = Drape;
+  if (drape) {
+    fabric.drape = drape;
   }
   if (imperfection) {
     fabric.imperfection = imperfection;
   }
   if (shop) {
-    fabric.shop = shop;
+    fabric.shope = shop;
   }
   if (currencyType) {
     fabric.currencyType = currencyType;
@@ -175,7 +175,7 @@ export const updateFabricDetails = async (req, res, next) => {
   if (widthValue) {
     fabric.widthValue = widthValue;
   }
-  
+
   try {
     await fabric.save();
     res.status(200).json({
