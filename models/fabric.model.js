@@ -38,7 +38,7 @@ const fabricSchema = new mongoose.Schema(
       //   required: true,
     },
     imageUrls: {
-      type: Array,
+      type: [String],
       //   required: true,
     },
     userRef: {
@@ -62,15 +62,15 @@ const fabricSchema = new mongoose.Schema(
       //   require: true,
     },
     usageIntent: {
-      type: Array,
+      type: [String],
       //   require: true,
     },
     fabricName: {
-      type: Array,
+      type: [String],
       //   require: true,
     },
     Pattern: {
-      type: Array,
+      type: [String],
       //   require: true,
     },
     stretchtype: {
@@ -118,11 +118,11 @@ const fabricSchema = new mongoose.Schema(
       // require:true
     },
     tags: {
-      type: Array,
+      type: [String],
       // require:true
     },
     fabricContent: {
-      type: Array,
+      type: [String],
     },
   },
   { timestamps: true }

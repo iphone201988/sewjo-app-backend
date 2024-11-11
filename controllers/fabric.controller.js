@@ -36,9 +36,10 @@ export const updateFabricDetails = async (req, res, next) => {
   if (!fabric) {
     return next(errorHandler(404, "Fabric not found!"));
   }
-  if (req.user.id !== fabric.userRef) {
-    return next(errorHandler(401, "You can only update your own listings!"));
-  }
+  
+  // if (req.user.id !== fabric.userRef) {
+  //   return next(errorHandler(401, "You can only update your own listings!"));
+  // }
 
   try {
     const updatedFabric = await Fabric.findByIdAndUpdate(

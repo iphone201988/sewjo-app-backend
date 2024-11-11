@@ -37,13 +37,15 @@ export const getAllSupplies = async (req, res, next) => {
 // Update Supply Details
 export const updateSupplyDetails = async (req, res, next) => {
   try {
+    console.log("params",req.params.id);
     const supply = await Supply.findById(req.params.id);
     if (!supply) {
       return next(errorHandler(404, "Supply not found!"));
     }
-    if (req.user.id !== supply.userRef) {
-      return next(errorHandler(401, "You can only update your own listings!"));
-    }
+
+    // if (req.user.id !== supply.userRef) {
+    //   return next(errorHandler(401, "You can only update your own listings!"));
+    // }
 
     const updatedSupply = await Supply.findByIdAndUpdate(
       req.params.id,
