@@ -37,8 +37,19 @@ export const getAllSupplies = async (req, res, next) => {
 // Update Supply Details
 export const updateSupplyDetails = async (req, res, next) => {
   try {
-    console.log("params", req.params.id);
-
+    const {
+      name,
+      imageUrls,
+      categories,
+      unitsOfMeasure,
+      color,
+      quantity,
+      brands,
+      price,
+      currency,
+      tags,
+      notes,
+    } = req.body;
     const supply = await Supply.findById(req.params.id);
     if (!supply) {
       return next(errorHandler(404, "Supply not found!"));
@@ -48,18 +59,46 @@ export const updateSupplyDetails = async (req, res, next) => {
     //   return next(errorHandler(401, "You can only update your own listings!"));
     // }
 
-    const updatedSupply = await Supply.findByIdAndUpdate(
-      req.params.id,
-      {
-        ...supply,
-        ...req.body,
-      },
-      { new: true }
-    );
-    console.log("req body",req.body);
-    console.log("supply", supply);
-    console.log("supply updated", updatedSupply);
-    return res.status(200).json(updatedSupply);
+    if (name) {
+      supply.name = name;
+    }
+    if (imageUrls) {
+      supply.imageUrls = imageUrls;
+    }
+    if (categories) {
+      supply.categories = categories;
+    }
+    if (unitsOfMeasure) {
+      supply.unitsOfMeasure = unitsOfMeasure;
+    }
+    if (color) {
+      supply.color = color;
+    }
+    if (quantity) {
+      supply.quantity = quantity;
+    }
+    if (brands) {
+      supply.brands = brands;
+    }
+    if (price) {
+      supply.price = price;
+    }
+    if (currency) {
+      supply.currency = currency;
+    }
+    if (tags) {
+      supply.tags = tags;
+    }
+    if (notes) {
+      supply.notes = notes;
+    }
+
+    await supply.save();
+    return res.status(200).json({
+      success: true,
+      message: "Supply details updated successfully!",
+      supply,
+    });
   } catch (error) {
     next(error);
   }
