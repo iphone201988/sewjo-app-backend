@@ -58,7 +58,7 @@ export const updateFabricDetails = async (req, res, next) => {
     shrinkage,
     drape,
     imperfection,
-    shop,
+    shope,
     currencyType,
     currency,
     location,
@@ -148,8 +148,8 @@ export const updateFabricDetails = async (req, res, next) => {
   if (imperfection) {
     fabric.imperfection = imperfection;
   }
-  if (shop) {
-    fabric.shope = shop;
+  if (shope) {
+    fabric.shope = shope;
   }
   if (currencyType) {
     fabric.currencyType = currencyType;
