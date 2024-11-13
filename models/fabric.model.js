@@ -5,16 +5,16 @@ const fabricSchema = new mongoose.Schema(
     name: {
       type: String,
       //   required: true,
-      default: ""
+      default: "",
     },
     description: {
       type: String,
-      default: ""
+      default: "",
       //   required: true,
     },
     material: {
       type: String,
-      default: ""
+      default: "",
       //   required: true,
     },
     width: {
@@ -24,147 +24,147 @@ const fabricSchema = new mongoose.Schema(
     },
     widthType: {
       type: String,
-      default: ""
+      default: "",
       //   required: true,
     },
     weight: {
       type: Number,
-      default: 0
+      default: 0,
       //   required: true,
     },
     weightType: {
       type: String,
-      default: ""
+      default: "",
     },
     color: {
       type: String,
-      default: ""
+      default: "",
       //   required: true,
     },
     price: {
       type: Number,
-      default: 0
+      default: 0,
       //   required: true,
     },
     imageUrls: {
       type: [String],
-      default: []
+      default: [],
       //   required: true,
     },
     userRef: {
       type: String,
-      default: ""
+      default: "",
       //   required: true,
     },
     length: {
       type: Number,
-      default: ""
+      default: "",
       //   require: true,
     },
     lenghtType: {
       type: String,
-      default: ""
+      default: "",
       //   require: true,
     },
     quantity: {
       type: Number,
-      default: 0
+      default: 0,
       //   require: true,
     },
     weave: {
       type: String,
-      default: ""
+      default: "",
       //   require: true,
     },
     usageIntent: {
       type: [String],
-      default: []
+      default: [],
       //   require: true,
     },
     fabricName: {
       type: [String],
-      default: []
+      default: [],
       //   require: true,
     },
     Pattern: {
       type: [String],
-      default: []
+      default: [],
       //   require: true,
     },
     stretchtype: {
       type: String,
-      default: ""
+      default: "",
       //   require: true,
     },
     stretchWidth: {
       type: Number,
-      default: 0
+      default: 0,
       // require: true,
     },
     stretchLength: {
       type: Number,
-      default: 0
+      default: 0,
       // require:true
     },
 
     lengthValue: {
       type: String,
-      default: ""
+      default: "",
       // require:true
     },
     widthValue: {
       type: String,
-      default: ""
+      default: "",
       // require:true
     },
 
     shrinkage: {
       type: String,
-      default: ""
+      default: "",
       // require:true
     },
     drape: {
       type: String,
-      default: ""
+      default: "",
       // require:true
     },
     imperfection: {
       type: String,
-      default: ""
+      default: "",
       // require:true
     },
     shope: {
       type: String,
-      default: ""
+      default: "",
       // require:true
     },
     currencyType: {
       type: String,
-      default: ""
+      default: "",
       // require:true
     },
     currency: {
       type: Number,
-      default: 0
+      default: 0,
     },
     location: {
       type: String,
-      default: ""
+      default: "",
       // require:true
     },
     note: {
       type: String,
-      default: ""
+      default: "",
       // require:true
     },
     tags: {
       type: [String],
-      default: []
+      default: [],
       // require:true
     },
     fabricContent: {
       type: [String],
-      default: []
+      default: [],
     },
   },
   { timestamps: true }

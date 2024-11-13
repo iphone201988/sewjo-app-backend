@@ -10,6 +10,7 @@ import messageRouter from "./routes/message.route.js";
 import conversationRouter from "./routes/conversation.route.js";
 import supplyRouter from "./routes/supply.route.js"; // Import the supply router
 import uploadRoute from "./routes/upload.route.js"
+import fieldRoute from "./routes/fabricFields.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import path from 'path';
@@ -91,6 +92,8 @@ app.use("/api/message", messageRouter);
 app.use("/api/conversation", conversationRouter);
 app.use("/api/supply", supplyRouter);
 app.use("/api/upload", uploadRoute);
+app.use("/api/field", fieldRoute);
+
 
 
 // Global error handler
