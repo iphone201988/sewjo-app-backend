@@ -1,10 +1,12 @@
 import CustomizeFields from "../models/customizeFields.js";
 
+
 export const cr̥eateCustomizeFields = async (req, res, next) => {
   try {
-    const customizeFields = new CustomizeFields(req.body);
-    await customizeFields.save();
-    res.status(201).json(customizeFields);
+    await CustomizeFields.deleteMany();
+    const newCustomizeFields = new CustomizeFields(req.body);
+    await newCustomizeFields.save();
+    res.status(201).json(newCustomizeFields);
   } catch (error) {
     next(error);
   }
@@ -13,7 +15,6 @@ export const cr̥eateCustomizeFields = async (req, res, next) => {
 export const getCustomizeFields = async (req, res, next) => {
   try {
     const customizeFields = await CustomizeFields.findOne();
-
     if (!customizeFields) {
       return res.status(404).json({
         success: false,
