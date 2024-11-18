@@ -1,11 +1,13 @@
 import express from "express";
 import { getFabricList, updateUser } from "../controllers/user.controller.js";
-import { verifyToken } from "../utils/verifyUser.js";
+import { verifyToken } from "../middlewares/verifyUser.js";
+import validate from "../middlewares/validate.js";
+import { updateProfileSchema } from "../schema/user.schema.js";
 
 
 const router = express.Router();
 
-router.post("/:id/update", verifyToken, updateUser);
-router.get("/:id/fabriclist", verifyToken, getFabricList);
+router.put("/update",validate(updateProfileSchema), verifyToken, updateUser);
+router.get("/fabriclist", verifyToken, getFabricList);
 
 export default router;

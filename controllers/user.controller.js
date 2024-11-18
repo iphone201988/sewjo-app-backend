@@ -1,7 +1,6 @@
 import Fabric from "../models/fabric.model.js";
 import User from "../models/user.model.js";
 import { errorHandler } from "../utils/error.js";
-import bcryptjs from "bcryptjs";
 
 export const singleUpload = async (req, res, next) => {
   try {
@@ -47,53 +46,115 @@ export const multiUpload = async (req, res, next) => {
 };
 
 export const updateUser = async (req, res, next) => {
-  if (req.user.id !== req.params.id)
-    return next(errorHandler(401, "You can only update your own account"));
+  const {
+    displayName,
+    email,
+    profileImage,
+    unit,
+    currency,
+    bio,
+    city,
+    country,
+    bust,
+    waist,
+    hip,
+    height,
+    bodyDimensionsUnit,
+    skillLevel,
+    preferredSewingStyles,
+    sewingMachinesAndTools,
+  } = req.body;
   try {
-    if (req.body.password) {
-      req.body.password = bcryptjs.hashSync(req.body.password, 10);
+    const user = await User.findOne({ _id: req.userId });
+    if (!user) return next(errorHandler(404, "User not found"));
+    if (email && user.email !== email) {
+      const existingUser = await User.findOne({ email });
+      if (existingUser) return next(errorHandler(400, "Email already in use"));
     }
-    const updateUser = await User.findByIdAndUpdate(
-      req.params.id,
-      {
-        $set: {
-          displayName: req.body.displayName,
-          email: req.body.email,
-          password: req.body.password,
-          profileImage: req.body.profileImage,
-          unit: req.body.unit,
-          currency: req.body.currency,
-          bio: req.body.bio,
-          city: req.body.city,
-          country: req.body.country,
-          bust: req.body.bust,
-          waist: req.body.waist,
-          hip: req.body.hip,
-          height: req.body.height,
-          bodyDimensionsUnit: req.body.bodyDimensionsUnit,
-          skillLevel: req.body.skillLevel,
-          preferredSewingStyles: req.body.preferredSewingStyles,
-          sewingMachinesAndTools: req.body.sewingMachinesAndTools,
-        },
-      },
-      { new: true }
-    );
-    const { password, ...restDetails } = updateUser._doc;
-    res.status(200).json(restDetails);
+    if (email) {
+      user.email = email;
+    }
+    if (displayName) {
+      user.displayName = displayName;
+    }
+    if (profileImage) {
+      user.profileImage = profileImage;
+    }
+    if (unit) {
+      user.unit = unit;
+    }
+    if (currency) {
+      user.currency = currency;
+    }
+    if (bio) {
+      user.bio = bio;
+    }
+    if (city) {
+      user.city = city;
+    }
+    if (country) {
+      user.country = country;
+    }
+    if (bust) {
+      user.bust = bust;
+    }
+    if (waist) {
+      user.waist = waist;
+    }
+    if (hip) {
+      user.hip = hip;
+    }
+    if (height) {
+      user.height = height;
+    }
+    if (bodyDimensionsUnit) {
+      user.bodyDimensionsUnit = bodyDimensionsUnit;
+    }
+    if (skillLevel) {
+      user.skillLevel = skillLevel;
+    }
+    if (preferredSewingStyles) {
+      user.preferredSewingStyles = preferredSewingStyles;
+    }
+    if (sewingMachinesAndTools) {
+      user.sewingMachinesAndTools = sewingMachinesAndTools;
+    }
+    const restDetails = await user.save();
+
+    restDetails.password = undefined;
+    restDetails.deviceToken = undefined;
+    restDetails.deviceType = undefined;
+    restDetails.__v = undefined;
+    restDetails.isDeleted = undefined;
+
+    res.status(201).json({
+      success: true,
+      message: "User details updated successfully",
+      user: restDetails,
+    });
   } catch (error) {
     next(error);
   }
 };
 
 export const getFabricList = async (req, res, next) => {
-  if (req.user.id === req.params.id) {
-    try {
-      const fabricList = await Fabric.find({ userRef: req.params.id });
-      res.status(200).json(fabricList);
-    } catch (error) {
-      next(error);
+  try {
+    const fabricList = await Fabric.find({ userRef: req.userId });
+    if (!fabricList) {
+      return next(errorHandler(404, "Fabric not found"));
     }
-  } else {
-    return next(errorHandler(401, "You can only view your own fabric stash"));
+    let message;
+    if (fabricList.length === 0) {
+      message = "No fabric found";
+    } else {
+      message = "Fabric list retrieved successfully";
+    }
+    res.status(200).json({
+      success: true,
+      message,
+      fabricList,
+    });
+  } catch (error) {
+    next(error);
   }
 };

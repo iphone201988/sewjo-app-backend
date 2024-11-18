@@ -1,89 +1,153 @@
 import User from "../models/user.model.js";
-import bcryptjs from "bcryptjs";
-import jwt from "jsonwebtoken";
 import { errorHandler } from "../utils/error.js";
+import {
+  comparePassword,
+  encryptPassword,
+  generateToken,
+} from "../helper/index.js";
 
 export const signup = async (req, res, next) => {
-	const { displayName, email, password, unit, currency } = req.body;
-	const hashedPassword = bcryptjs.hashSync(password, 10);
-	const newUser = new User({
-		displayName,
-		email,
-		password: hashedPassword,
-		unit,
-		currency,
-	});
-	try {
-		await newUser.save();
-		res.status(201).json("User created successfully!");
-	} catch (error) {
-		next(error);
-	}
+  const { email, password } = req.body;
+
+  try {
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return next(
+        errorHandler(
+          400,
+          "Email is already registered. Please use a different email address!"
+        )
+      );
+    }
+
+    const hashedPassword = await encryptPassword(password);
+    const newUser = new User.create({
+      ...req.body,
+      password: hashedPassword,
+    });
+
+    const payload = { id: newUser._id };
+    const token = generateToken(payload);
+
+    res.status(201).json({
+      success: true,
+      message: "User created successfully!",
+      user: {
+        id: newUser._id,
+        email: newUser.email,
+        displayName: validUser.displayName,
+        access_token: token,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
 };
 
 export const signin = async (req, res, next) => {
-	const { email, password } = req.body;
-	try {
-		const validUser = await User.findOne({ email });
-		if (!validUser) return next(errorHandler(404, "User not found!"));
-		const validPassword = bcryptjs.compareSync(password, validUser.password);
-		if (!validPassword) return next(errorHandler(401, "Wrong credentials!"));
-		const token = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET);
-
-		//exclude password from the response
-		const { password: pass, ...restDetails } = validUser._doc;
-
-		res
-			.cookie("access_token", token, { httpOnly: true })
-			.status(200)
-			.json(restDetails);
-	} catch (error) {
-		next(error);
-	}
+  const { email, password, deviceType, deviceToken } = req.body;
+  try {
+    const validUser = await User.findOne({ email });
+    if (!validUser) return next(errorHandler(404, "User not found!"));
+    const validPassword = await comparePassword(password, validUser.password);
+    if (!validPassword) return next(errorHandler(401, "Wrong credentials!"));
+    const payload = { id: validUser._id };
+    const token = generateToken(payload);
+    validUser.deviceType = deviceType;
+    validUser.deviceToken = deviceToken;
+    await validUser.save();
+    res.status(201).json({
+      success: true,
+      message: "User login successfully!",
+      user: {
+        id: validUser._id,
+        email: validUser.email,
+        displayName: validUser.displayName,
+        access_token: token,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
 };
 
 export const googleLogin = async (req, res, next) => {
-	try {
-		const user = await User.findOne({ email: req.body.email });
-		if (user) {
-			const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+  try {
+    const { email, deviceType, deviceToken, displayName, profileImage } =
+      req.body;
+      
 
-			//exclude password from the response
-			const { password: pass, ...restDetails } = user._doc;
+    let user = await User.findOne({ email });
+    if (user) {
+      const payload = { id: user._id };
+      const token = generateToken(payload);
 
-			res
-				.cookie("access_token", token, { httpOnly: true })
-				.status(200)
-				.json(restDetails);
-		} else {
-			const generatedPassword =
-				Math.random().toString(36).slice(-8) +
-				Math.random().toString(36).slice(-8);
-			const hashedPassword = bcryptjs.hashSync(generatedPassword, 10);
-			const newUser = new User({
-				displayName: req.body.name,
-				email: req.body.email,
-				password: hashedPassword,
-				profileImage: req.body.photo,
-			});
-			await newUser.save();
-			const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET);
-			const { password: pass, ...restDetails } = newUser._doc;
-			res
-				.cookie("access_token", token, { httpOnly: true })
-				.status(200)
-				.json(restDetails);
-		}
-	} catch (error) {
-		next(error);
-	}
+      user.deviceType = deviceType;
+      user.deviceToken = deviceToken;
+
+      await user.save();
+
+      res.status(201).json({
+        success: true,
+        message: "Social login successfully!",
+        user: {
+          id: user._id,
+          email: user.email,
+          displayName: user.displayName,
+          access_token: token,
+        },
+      });
+    } else {
+      const generatedPassword =
+        Math.random().toString(36).slice(-8) +
+        Math.random().toString(36).slice(-8);
+      const hashedPassword = await encryptPassword(generatedPassword);
+      const newUser = new User({
+        email,
+        displayName,
+        profileImage,
+        password: hashedPassword,
+        deviceType,
+        deviceToken,
+      });
+
+      await newUser.save();
+
+      const payload = { id: newUser._id };
+      const token = generateToken(payload);
+
+      res.status(201).json({
+        success: true,
+        message: "User created and logged in successfully!",
+        user: {
+          id: newUser._id,
+          email: newUser.email,
+          displayName: newUser.displayName,
+          access_token: token,
+        },
+      });
+    }
+  } catch (error) {
+    next(error);
+  }
 };
 
 export const signout = async (req, res, next) => {
-	try {
-		res.clearCookie("access_token");
-		res.status(200).json("User has been logged out!");
-	} catch (error) {
-		next(error);
-	}
+  try {
+    const userId = req.userId;
+    const user = await User.findByIdAndUpdate(
+      userId,
+      { deviceToken: null, deviceType: null },
+      { new: true }
+    );
+    if (!user) {
+      return next(errorHandler(404, "User not found!"));
+    }
+    res.status(201).json({
+      success: true,
+      message: "User logged out successfully!",
+    });
+  } catch (error) {
+    next(error);
+  }
 };

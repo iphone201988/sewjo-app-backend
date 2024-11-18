@@ -1,25 +1,37 @@
 import { errorHandler } from "../utils/error.js";
 import Supply from "../models/supply.model.js";
 
-// Create Supply
 export const createSupply = async (req, res, next) => {
+  const userId = req.userId;
   try {
-    const supply = await Supply.create(req.body);
-    return res.status(201).json(supply);
+    const supply = await Supply.create({ ...req.body, userRef: userId });
+    return res.status(201).json({
+      success: true,
+      message: "Supply created successfully!",
+      supply,
+    });
   } catch (error) {
-    next(error); // Pass error to the error handler
+    next(error);
   }
 };
 
-// Get Supply Details
-// Get Supply Details
 export const getSupplyDetails = async (req, res, next) => {
   try {
-    const supply = await Supply.findById(req.params.id);
+    const supply = await Supply.findById({
+      _id: req.params.id,
+      userRef: req.userId,
+    });
     if (!supply) {
       return next(errorHandler(404, "Supply not found!"));
     }
-    return res.status(200).json(supply);
+    if (req.userId !== supply.userRef) {
+      return next(errorHandler(403, "You can only view your own supplies!"));
+    }
+    return res.status(200).json({
+      success: true,
+      message: "Supply details retrieved successfully!",
+      supply,
+    });
   } catch (error) {
     next(error);
   }
@@ -27,14 +39,27 @@ export const getSupplyDetails = async (req, res, next) => {
 
 export const getAllSupplies = async (req, res, next) => {
   try {
-    const supplies = await Supply.find(); // Fetch all supplies
-    return res.status(200).json(supplies); // Send the supplies as response
+    const userId = req.userId;
+    const supplies = await Supply.find({ userRef: userId });
+    if (!supplies) {
+      return next(errorHandler(404, "No supplies found for this user!"));
+    }
+    let message;
+    if (supplies.length === 0) {
+      message = "No supplies found for this user!";
+    } else {
+      message = "Supplies retrieved successfully!";
+    }
+    return res.status(200).json({
+      success: true,
+      message,
+      supplies,
+    });
   } catch (error) {
-    next(error); // Pass any errors to the error handler
+    next(error);
   }
 };
 
-// Update Supply Details
 export const updateSupplyDetails = async (req, res, next) => {
   try {
     const {
@@ -55,9 +80,9 @@ export const updateSupplyDetails = async (req, res, next) => {
       return next(errorHandler(404, "Supply not found!"));
     }
 
-    // if (req.user.id !== supply.userRef) {
-    //   return next(errorHandler(401, "You can only update your own listings!"));
-    // }
+    if (req.userId !== supply.userRef) {
+      return next(errorHandler(401, "You can only update your own listings!"));
+    }
 
     if (name) {
       supply.name = name;
@@ -104,19 +129,22 @@ export const updateSupplyDetails = async (req, res, next) => {
   }
 };
 
-export const deleteSupply = async (req, res , next) => {
-    try {
-        const id = req.params.id;
-        const supply = await Supply.findById(id);
-        if (!supply) {
-          return next(errorHandler(404, "supply not found!"));
-        }
-        await Supply.findByIdAndDelete(id);
-        res.status(200).json({
-          succccess: true,
-          message: "Supply deleted successfully!",
-        });
-      } catch (error) {
-        next(error);
-      }
-}
+export const deleteSupply = async (req, res, next) => {
+  try {
+    const id = req.params.id;
+    const supply = await Supply.findById(id);
+    if (!supply) {
+      return next(errorHandler(404, "supply not found!"));
+    }
+    if (req.userId !== supply.userRef) {
+      return next(errorHandler(401, "You can only delete your own listings!"));
+    }
+    await Supply.findByIdAndDelete(id);
+    res.status(200).json({
+      succccess: true,
+      message: "Supply deleted successfully!",
+    });
+  } catch (error) {
+    next(error);
+  }
+};

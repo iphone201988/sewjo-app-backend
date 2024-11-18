@@ -12,9 +12,10 @@ const supplySchema = new mongoose.Schema({
     currency: { type: String, default: "CAD" },
     tags: { type: [String], default: [] },
     notes: { type: String, default: "" },
-    userRef: { type: String, required: false },
+    userRef: { type: String},
+},{
+    timestamps: true
 });
 
-// Create a Supply model
 const Supply = mongoose.model('Supply', supplySchema);
 export default Supply;

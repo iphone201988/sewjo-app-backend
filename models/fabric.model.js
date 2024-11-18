@@ -53,8 +53,6 @@ const fabricSchema = new mongoose.Schema(
     },
     userRef: {
       type: String,
-      default: "",
-      //   required: true,
     },
     length: {
       type: Number,

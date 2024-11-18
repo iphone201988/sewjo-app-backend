@@ -4,16 +4,13 @@ const userSchema = new mongoose.Schema(
   {
     displayName: {
       type: String,
-      required: true,
     },
     email: {
       type: String,
       required: true,
-      unique: true,
     },
     password: {
       type: String,
-      required: true,
     },
     profileImage: {
       type: String,
@@ -63,6 +60,16 @@ const userSchema = new mongoose.Schema(
     },
     sewingMachinesAndTools: {
       type: String,
+    },
+    deviceToken: {
+      type: String,
+    },
+    deviceType: {
+      type: Number, // 1 => IOS & 2 ANDROID & 3 WEB
+    },
+    isDeleted: {
+      type: Boolean,
+      default: false,
     },
   },
   { timestamps: true }

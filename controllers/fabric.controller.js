@@ -3,8 +3,16 @@ import Fabric from "../models/fabric.model.js";
 
 export const createFabricStash = async (req, res, next) => {
   try {
-    const fabric = await Fabric.create(req.body);
-    return res.status(201).json(fabric);
+    const userId = req.userId;
+    const fabric = await Fabric.create({
+      ...req.body,
+      userRef: userId,
+    });
+    return res.status(201).json({
+      success: true,
+      message: "Fabric added successfully!",
+      fabric,
+    });
   } catch (error) {
     next(error);
   }
@@ -12,11 +20,19 @@ export const createFabricStash = async (req, res, next) => {
 
 export const getFabricDetails = async (req, res, next) => {
   try {
-    const fabric = await Fabric.findById(req.params.id);
+    const userId = req.userId;
+    const fabric = await Fabric.findById({
+      _id: req.params.id,
+      userRef: userId,
+    });
     if (!fabric) {
       return next(errorHandler(404, "Fabric not found!"));
     }
-    return res.status(200).json(fabric);
+    return res.status(201).json({
+      success: true,
+      message: "Fabric Details found successfully!",
+      fabric,
+    });
   } catch (error) {
     next(error);
   }
@@ -24,10 +40,26 @@ export const getFabricDetails = async (req, res, next) => {
 
 export const getAllFabric = async (req, res, next) => {
   try {
-    const fabric = await Fabric.find(); // Fetch all supplies
-    return res.status(200).json(fabric); // Send the supplies as response
+    const userId = req.userId;
+    const fabric = await Fabric.find({
+      userRef: userId,
+    });
+    if (!fabric) {
+      return next(errorHandler(404, "Fabric not found!"));
+    }
+    let message;
+    if (fabric.length === 0) {
+      message = "No fabric found!";
+    } else {
+      message = "Fabric found successfully!";
+    }
+    return res.status(200).json({
+      success: true,
+      message,
+      fabric,
+    });
   } catch (error) {
-    next(error); // Pass any errors to the error handler
+    next(error);
   }
 };
 
@@ -72,9 +104,9 @@ export const updateFabricDetails = async (req, res, next) => {
     return next(errorHandler(404, "Fabric not found!"));
   }
 
-  // if (req.user.id !== fabric.userRef) {
-  //   return next(errorHandler(401, "You can only update your own listings!"));
-  // }
+  if (req.userId !== fabric.userRef) {
+    return next(errorHandler(401, "You can only update your own listings!"));
+  }
 
   if (name) {
     fabric.name = name;
@@ -194,6 +226,11 @@ export const deleteFabric = async (req, res, next) => {
     if (!fabric) {
       return next(errorHandler(404, "Fabric not found!"));
     }
+
+    if (req.userId !== fabric.userRef) {
+      return next(errorHandler(401, "You can only delete your own listings!"));
+    }
+
     await Fabric.findByIdAndDelete(id);
     res.status(200).json({
       succccess: true,
