@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 
 export const encryptPassword = async (password) => {
   const salt = 10;
-  const hashedPassword = await bcrypt.hash(password,salt);
+  const hashedPassword = await bcrypt.hash(password, salt);
   return hashedPassword;
 };
 
@@ -14,7 +14,7 @@ export const comparePassword = async (password, hashedPassword) => {
 
 export const generateToken = (payload) => {
   const secretKey = process.env.JWT_SECRET;
-  return jwt.sign(payload, secretKey, { expiresIn: "1d" });
+  return jwt.sign(payload, secretKey, { expiresIn: "30d" });
 };
 
 export const validateToken = (token) => {
@@ -43,5 +43,3 @@ export const generateOtp = () => {
   const max = 9999;
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
-
-

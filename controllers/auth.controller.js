@@ -21,7 +21,7 @@ export const signup = async (req, res, next) => {
     }
 
     const hashedPassword = await encryptPassword(password);
-    const newUser = new User.create({
+    const newUser = await User.create({
       ...req.body,
       password: hashedPassword,
     });
@@ -35,7 +35,7 @@ export const signup = async (req, res, next) => {
       user: {
         id: newUser._id,
         email: newUser.email,
-        displayName: validUser.displayName,
+        displayName: newUser.displayName,
         access_token: token,
       },
     });
