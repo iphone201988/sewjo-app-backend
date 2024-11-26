@@ -13,7 +13,6 @@ export const createSupplySchema = {
     currency: Joi.string().optional().default("CAD"),
     tags: Joi.array().items(Joi.string()).optional().default([]),
     notes: Joi.string().optional().default(""),
-    userRef: Joi.string().required(),
   }),
 };
 
