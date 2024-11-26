@@ -5,16 +5,16 @@ const fabricSchema = new mongoose.Schema(
     name: {
       type: String,
       //   required: true,
-      default: "",
+      // default: "",
     },
     description: {
       type: String,
-      default: "",
+      // default: "",
       //   required: true,
     },
     material: {
       type: String,
-      default: "",
+      // default: "",
       //   required: true,
     },
     width: {
@@ -24,7 +24,7 @@ const fabricSchema = new mongoose.Schema(
     },
     widthType: {
       type: String,
-      default: "",
+      // default: "",
       //   required: true,
     },
     weight: {
@@ -34,11 +34,11 @@ const fabricSchema = new mongoose.Schema(
     },
     weightType: {
       type: String,
-      default: "",
+      // default: "",
     },
     color: {
       type: String,
-      default: "",
+      // default: "",
       //   required: true,
     },
     price: {
@@ -56,12 +56,12 @@ const fabricSchema = new mongoose.Schema(
     },
     length: {
       type: Number,
-      default: "",
+      // default: "",
       //   require: true,
     },
     lenghtType: {
       type: String,
-      default: "",
+      // default: "",
       //   require: true,
     },
     quantity: {
@@ -71,7 +71,7 @@ const fabricSchema = new mongoose.Schema(
     },
     weave: {
       type: String,
-      default: "",
+      // default: "",
       //   require: true,
     },
     usageIntent: {
@@ -91,7 +91,7 @@ const fabricSchema = new mongoose.Schema(
     },
     stretchtype: {
       type: String,
-      default: "",
+      // default: "",
       //   require: true,
     },
     stretchWidth: {
@@ -107,18 +107,18 @@ const fabricSchema = new mongoose.Schema(
 
     lengthValue: {
       type: String,
-      default: "",
+      // default: "",
       // require:true
     },
     widthValue: {
       type: String,
-      default: "",
+      // default: "",
       // require:true
     },
 
     shrinkage: {
       type: String,
-      default: "",
+      // default: "",
       // require:true
     },
     drape: {
@@ -128,17 +128,17 @@ const fabricSchema = new mongoose.Schema(
     },
     imperfection: {
       type: String,
-      default: "",
+      // default: "",
       // require:true
     },
     shope: {
       type: String,
-      default: "",
+      // default: "",
       // require:true
     },
     currencyType: {
       type: String,
-      default: "",
+      // default: "",
       // require:true
     },
     currency: {
@@ -147,12 +147,12 @@ const fabricSchema = new mongoose.Schema(
     },
     location: {
       type: String,
-      default: "",
+      // default: "",
       // require:true
     },
     note: {
       type: String,
-      default: "",
+      // default: "",
       // require:true
     },
     tags: {

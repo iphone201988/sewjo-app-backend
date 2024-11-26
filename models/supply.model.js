@@ -1,17 +1,17 @@
 import mongoose from "mongoose";
 
 const supplySchema = new mongoose.Schema({
-    name: { type: String, required: false, default: "" },
+    name: { type: String },
     imageUrls: { type: [String], default: [] },
     categories: { type: [String], default: [] },
     unitsOfMeasure: { type: [String], default: [] },
-    color: { type: String, default: "" },
+    color: { type: String },
     quantity: { type: Number, default: 1 },
     brands: { type: [String], default: [] },
-    price: { type: String, default: "" },
+    price: { type: String },
     currency: { type: String, default: "CAD" },
     tags: { type: [String], default: [] },
-    notes: { type: String, default: "" },
+    notes: { type: String },
     userRef: { type: String},
 },{
     timestamps: true
