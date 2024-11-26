@@ -66,7 +66,7 @@ export const updateFabricSchema = {
     stretchWidth: Joi.number().optional(),
     stretchLength: Joi.number().optional(),
     shrinkage: Joi.string().optional(),
-    drape: Joi.string().optional(),
+    drape: Joi.number().optional(),
     imperfection: Joi.string().optional(),
     shope: Joi.string().optional(),
     currencyType: Joi.string().optional(),
@@ -77,6 +77,7 @@ export const updateFabricSchema = {
     fabricContent: Joi.array().items(Joi.string()).optional(),
     lengthValue: Joi.string().optional(),
     widthValue: Joi.string().optional(),
+    lenghtType: Joi.string().optional(),
   }),
 };
 
