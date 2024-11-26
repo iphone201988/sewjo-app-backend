@@ -122,8 +122,8 @@ const fabricSchema = new mongoose.Schema(
       // require:true
     },
     drape: {
-      type: String,
-      default: "",
+      type: Number,
+      default: 0,
       // require:true
     },
     imperfection: {
