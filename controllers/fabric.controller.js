@@ -47,6 +47,9 @@ export const getAllFabric = async (req, res, next) => {
     if (!fabric) {
       return next(errorHandler(404, "Fabric not found!"));
     }
+    fabric.forEach(element => {
+      element.price = element.price==null?0:element.price;
+    });
     let message;
     if (fabric.length === 0) {
       message = "No fabric found!";
