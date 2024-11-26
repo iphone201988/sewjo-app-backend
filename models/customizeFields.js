@@ -2,10 +2,7 @@ import mongoose from "mongoose";
 
 const customizeFieldsSchema = new mongoose.Schema(
   {
-    // userId: {
-    //   type: mongoose.Schema.Types.ObjectId,
-    //   ref: "User",
-    // },
+    userRef: { type: String },
     fabric: {
       type: Array,
     },
