@@ -102,6 +102,7 @@ export const updateFabricDetails = async (req, res, next) => {
     fabricContent,
     lengthValue,
     widthValue,
+    variant
   } = req.body;
   if (!fabric) {
     return next(errorHandler(404, "Fabric not found!"));
@@ -209,6 +210,9 @@ export const updateFabricDetails = async (req, res, next) => {
   }
   if (widthValue) {
     fabric.widthValue = widthValue;
+  }
+  if(variant){
+    fabric.variant = variant;
   }
 
   try {

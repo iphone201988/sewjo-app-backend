@@ -36,6 +36,7 @@ export const createFabricSchema = {
     lengthValue: Joi.string().optional(),
     widthValue: Joi.string().optional(),
     lenghtType: Joi.string().optional(),
+    variant:Joi.array().items(Joi.object().pattern(Joi.string(), Joi.any())).optional()
   }),
 };
 
@@ -78,6 +79,7 @@ export const updateFabricSchema = {
     lengthValue: Joi.string().optional(),
     widthValue: Joi.string().optional(),
     lenghtType: Joi.string().optional(),
+    variant:Joi.array().items(Joi.object().pattern(Joi.string(), Joi.any())).optional()
   }),
 };
 

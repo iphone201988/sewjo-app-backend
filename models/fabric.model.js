@@ -164,6 +164,9 @@ const fabricSchema = new mongoose.Schema(
       type: [String],
       default: [],
     },
+    variant: {
+      type: Array,
+    },
   },
   { timestamps: true }
 );
