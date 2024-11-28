@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 
-const supplySchema = new mongoose.Schema({
+const supplySchema = new mongoose.Schema(
+  {
     name: { type: String },
     imageUrls: { type: [String], default: [] },
     categories: { type: [String], default: [] },
@@ -8,14 +9,16 @@ const supplySchema = new mongoose.Schema({
     color: { type: String },
     quantity: { type: Number, default: 1 },
     brands: { type: [String], default: [] },
-    price: { type: String },
+    price: { type: Number, default: 0 },
     currency: { type: String, default: "CAD" },
     tags: { type: [String], default: [] },
     notes: { type: String },
-    userRef: { type: String},
-},{
-    timestamps: true
-});
+    userRef: { type: String },
+  },
+  {
+    timestamps: true,
+  }
+);
 
-const Supply = mongoose.model('Supply', supplySchema);
+const Supply = mongoose.model("Supply", supplySchema);
 export default Supply;
