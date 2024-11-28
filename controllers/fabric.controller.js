@@ -168,6 +168,7 @@ export const updateFabricDetails = async (req, res, next) => {
       productRef: fabric._id,
       reasons,
       preQuantity: fabric.quantity,
+      curQuantity:quantity,
     });
   }
   if (quantity) {

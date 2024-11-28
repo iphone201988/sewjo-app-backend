@@ -4,6 +4,7 @@ const historySchema = new mongoose.Schema(
   {
     productRef: { type: String },
     preQuantity: { type: Number },
+    curQuantity: { type: Number},
     reasons: { type: String },
   },
   {

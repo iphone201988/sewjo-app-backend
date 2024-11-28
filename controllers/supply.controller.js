@@ -114,6 +114,7 @@ export const updateSupplyDetails = async (req, res, next) => {
         productRef: supply._id,
         reasons,
         preQuantity: supply.quantity,
+        curQuantity:quantity,
       });
     }
 
