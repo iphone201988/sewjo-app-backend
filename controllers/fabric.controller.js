@@ -170,8 +170,7 @@ export const updateFabricDetails = async (req, res, next) => {
       preQuantity: fabric.quantity,
     });
   }
-
-  if (quantity && reasons) {
+  if (quantity) {
     if(quantity === fabric.quantity){
       return next(errorHandler(401, "quantity must be different from previous quantity"));
     }
