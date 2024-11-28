@@ -31,12 +31,14 @@ export const createFabricSchema = {
     currency: Joi.number().optional(),
     location: Joi.string().optional(),
     note: Joi.string().optional(),
-    tags: Joi.array().items(Joi.string()).optional(), 
+    tags: Joi.array().items(Joi.string()).optional(),
     fabricContent: Joi.array().items(Joi.string()).optional(),
     lengthValue: Joi.string().optional(),
     widthValue: Joi.string().optional(),
     lenghtType: Joi.string().optional(),
-    variant:Joi.array().items(Joi.object().pattern(Joi.string(), Joi.any())).optional()
+    variant: Joi.array()
+      .items(Joi.object().pattern(Joi.string(), Joi.any()))
+      .optional(),
   }),
 };
 
@@ -59,6 +61,13 @@ export const updateFabricSchema = {
     length: Joi.number().optional(),
     lengthType: Joi.string().optional(),
     quantity: Joi.number().optional(),
+    reasons: Joi.when('quantity', {
+      is: Joi.number().greater(0),
+      then: Joi.string().required().messages({
+        'any.required': 'Reasons are required when quantity is provided',
+      }),
+      otherwise: Joi.string().optional(),
+    }),
     weave: Joi.string().optional(),
     usageIntent: Joi.array().items(Joi.string()).optional(),
     fabricName: Joi.array().items(Joi.string()).optional(),
@@ -79,7 +88,9 @@ export const updateFabricSchema = {
     lengthValue: Joi.string().optional(),
     widthValue: Joi.string().optional(),
     lenghtType: Joi.string().optional(),
-    variant:Joi.array().items(Joi.object().pattern(Joi.string(), Joi.any())).optional()
+    variant: Joi.array()
+      .items(Joi.object().pattern(Joi.string(), Joi.any()))
+      .optional(),
   }),
 };
 

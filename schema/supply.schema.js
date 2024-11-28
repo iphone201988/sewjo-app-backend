@@ -27,6 +27,13 @@ export const updateSupplySchema = {
     unitsOfMeasure: Joi.array().items(Joi.string()).optional().default([]),
     color: Joi.string().optional().default(""),
     quantity: Joi.number().optional().default(1),
+    reasons: Joi.when('quantity', {
+      is: Joi.number().greater(0),
+      then: Joi.string().required().messages({
+        'any.required': 'Reasons are required when quantity is provided',
+      }),
+      otherwise: Joi.string().optional(),
+    }),
     brands: Joi.array().items(Joi.string()).optional().default([]),
     price: Joi.string().optional().default(""),
     currency: Joi.string().optional().default("CAD"),

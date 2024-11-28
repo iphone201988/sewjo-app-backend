@@ -1,5 +1,6 @@
 import { errorHandler } from "../utils/error.js";
 import Fabric from "../models/fabric.model.js";
+import History from "../models/updateHistory.model.js";
 
 export const createFabricStash = async (req, res, next) => {
   try {
@@ -28,11 +29,18 @@ export const getFabricDetails = async (req, res, next) => {
     if (!fabric) {
       return next(errorHandler(404, "Fabric not found!"));
     }
+    const history = await History.find({
+      productRef: fabric._id,
+    }).sort({ createdAt: -1 });
+
     return res.status(201).json({
       success: true,
       message: "Fabric Details found successfully!",
-      fabric,
-    });
+      data: {
+        ...fabric.toObject(),
+        history
+      }
+    }); 
   } catch (error) {
     next(error);
   }
@@ -47,8 +55,8 @@ export const getAllFabric = async (req, res, next) => {
     if (!fabric) {
       return next(errorHandler(404, "Fabric not found!"));
     }
-    fabric.forEach(element => {
-      element.price = element.price==null?0:element.price;
+    fabric.forEach((element) => {
+      element.price = element.price == null ? 0 : element.price;
     });
     let message;
     if (fabric.length === 0) {
@@ -83,6 +91,7 @@ export const updateFabricDetails = async (req, res, next) => {
     length,
     lenghtType,
     quantity,
+    reasons,
     weave,
     usageIntent,
     fabricName,
@@ -102,8 +111,10 @@ export const updateFabricDetails = async (req, res, next) => {
     fabricContent,
     lengthValue,
     widthValue,
-    variant
+    variant,
   } = req.body;
+
+  
   if (!fabric) {
     return next(errorHandler(404, "Fabric not found!"));
   }
@@ -151,7 +162,16 @@ export const updateFabricDetails = async (req, res, next) => {
   if (lenghtType) {
     fabric.lenghtType = lenghtType;
   }
-  if (quantity) {
+  let history;
+  if (quantity && reasons) {
+    if(quantity === fabric.quantity){
+      return next(errorHandler(401, "quantity must be different from previous quantity"));
+    }
+    await History.create({
+      productRef: fabric._id,
+      reasons,
+      preQuantity: fabric.quantity,
+    });
     fabric.quantity = quantity;
   }
   if (weave) {
@@ -211,16 +231,23 @@ export const updateFabricDetails = async (req, res, next) => {
   if (widthValue) {
     fabric.widthValue = widthValue;
   }
-  if(variant){
+  if (variant) {
     fabric.variant = variant;
   }
+
+  history = await History.find({
+    productRef: fabric._id,
+  }).sort({ createdAt: -1 });
 
   try {
     await fabric.save();
     res.status(200).json({
       success: true,
       message: "Fabric updated successfully!",
-      updatedFabric: fabric,
+      updatedFabric: {
+        ...fabric.toObject(),
+        history,
+      },
     });
   } catch (error) {
     next(error);

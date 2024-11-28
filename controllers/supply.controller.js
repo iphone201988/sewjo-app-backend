@@ -1,5 +1,6 @@
 import { errorHandler } from "../utils/error.js";
 import Supply from "../models/supply.model.js";
+import History from "../models/updateHistory.model.js";
 
 export const createSupply = async (req, res, next) => {
   const userId = req.userId;
@@ -27,10 +28,17 @@ export const getSupplyDetails = async (req, res, next) => {
     if (req.userId !== supply.userRef) {
       return next(errorHandler(403, "You can only view your own supplies!"));
     }
+    const history = await History.find({
+      productRef: supply._id,
+    }).sort({ createdAt: -1 });
+
     return res.status(200).json({
       success: true,
       message: "Supply details retrieved successfully!",
-      supply,
+      data: {
+        ...supply.toObject(),
+        history,
+      },
     });
   } catch (error) {
     next(error);
@@ -74,6 +82,7 @@ export const updateSupplyDetails = async (req, res, next) => {
       currency,
       tags,
       notes,
+      reasons,
     } = req.body;
     const supply = await Supply.findById(req.params.id);
     if (!supply) {
@@ -99,7 +108,17 @@ export const updateSupplyDetails = async (req, res, next) => {
     if (color) {
       supply.color = color;
     }
-    if (quantity) {
+    if (quantity && reasons) {
+      if (quantity === supply.quantity) {
+        return next(
+          errorHandler(401, "quantity must be different from previous quantity")
+        );
+      }
+      await History.create({
+        productRef: supply._id,
+        reasons,
+        preQuantity: supply.quantity,
+      });
       supply.quantity = quantity;
     }
     if (brands) {
@@ -119,10 +138,16 @@ export const updateSupplyDetails = async (req, res, next) => {
     }
 
     await supply.save();
+    const history = await History.find({
+      productRef: supply._id,
+    }).sort({ createdAt: -1 });
     return res.status(200).json({
       success: true,
       message: "Supply details updated successfully!",
-      supply,
+      supply: {
+        ...supply.toObject(),
+        history,
+      },
     });
   } catch (error) {
     next(error);

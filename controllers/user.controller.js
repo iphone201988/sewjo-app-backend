@@ -1,4 +1,5 @@
 import Fabric from "../models/fabric.model.js";
+import History from "../models/updateHistory.model.js";
 import User from "../models/user.model.js";
 import { errorHandler } from "../utils/error.js";
 
@@ -153,6 +154,28 @@ export const getFabricList = async (req, res, next) => {
       success: true,
       message,
       fabricList,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const updateHistory = async (req, res, next) => {
+  try {
+    const id = req.params.id;
+    const { reasons } = req.body;
+    const history = await History.findOne({ _id: id });
+    if (!history) {
+      return next(errorHandler(404, "History not found"));
+    }
+    if (reasons) {
+      history.reasons = reasons;
+    }
+    await history.save();
+    res.status(200).json({
+      success: true,
+      message: "History updated successfully",
+      history,
     });
   } catch (error) {
     next(error);
