@@ -11,6 +11,7 @@ import conversationRouter from "./routes/conversation.route.js";
 import supplyRouter from "./routes/supply.route.js"; // Import the supply router
 import uploadRoute from "./routes/upload.route.js"
 import fieldRoute from "./routes/fabricFields.js";
+import orderRoute from "./routes/order.route.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import path from 'path';
@@ -93,6 +94,7 @@ app.use("/api/conversation", conversationRouter);
 app.use("/api/supply", supplyRouter);
 app.use("/api/upload", uploadRoute);
 app.use("/api/field", fieldRoute);
+app.use("/api/order", orderRoute);
 
 
 
