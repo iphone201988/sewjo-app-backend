@@ -36,7 +36,7 @@ export const getFabricDetails = async (req, res, next) => {
     return res.status(201).json({
       success: true,
       message: "Fabric Details found successfully!",
-      data: {
+      fabric: {
         ...fabric.toObject(),
         history
       }
@@ -163,15 +163,18 @@ export const updateFabricDetails = async (req, res, next) => {
     fabric.lenghtType = lenghtType;
   }
   let history;
-  if (quantity && reasons) {
-    if(quantity === fabric.quantity){
-      return next(errorHandler(401, "quantity must be different from previous quantity"));
-    }
+  if(reasons){
     await History.create({
       productRef: fabric._id,
       reasons,
       preQuantity: fabric.quantity,
     });
+  }
+
+  if (quantity && reasons) {
+    if(quantity === fabric.quantity){
+      return next(errorHandler(401, "quantity must be different from previous quantity"));
+    }
     fabric.quantity = quantity;
   }
   if (weave) {

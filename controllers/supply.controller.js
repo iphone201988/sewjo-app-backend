@@ -35,7 +35,7 @@ export const getSupplyDetails = async (req, res, next) => {
     return res.status(200).json({
       success: true,
       message: "Supply details retrieved successfully!",
-      data: {
+      supply: {
         ...supply.toObject(),
         history,
       },
@@ -108,17 +108,21 @@ export const updateSupplyDetails = async (req, res, next) => {
     if (color) {
       supply.color = color;
     }
-    if (quantity && reasons) {
-      if (quantity === supply.quantity) {
-        return next(
-          errorHandler(401, "quantity must be different from previous quantity")
-        );
-      }
+
+    if(reasons){
       await History.create({
         productRef: supply._id,
         reasons,
         preQuantity: supply.quantity,
       });
+    }
+
+    if (quantity) {
+      if (quantity === supply.quantity) {
+        return next(
+          errorHandler(401, "quantity must be different from previous quantity")
+        );
+      }
       supply.quantity = quantity;
     }
     if (brands) {

@@ -61,13 +61,7 @@ export const updateFabricSchema = {
     length: Joi.number().optional(),
     lengthType: Joi.string().optional(),
     quantity: Joi.number().optional(),
-    reasons: Joi.when('quantity', {
-      is: Joi.number().greater(0),
-      then: Joi.string().required().messages({
-        'any.required': 'Reasons are required when quantity is provided',
-      }),
-      otherwise: Joi.string().optional(),
-    }),
+    reasons: Joi.string().optional(),
     weave: Joi.string().optional(),
     usageIntent: Joi.array().items(Joi.string()).optional(),
     fabricName: Joi.array().items(Joi.string()).optional(),
