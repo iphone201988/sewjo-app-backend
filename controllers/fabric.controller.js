@@ -171,9 +171,9 @@ export const updateFabricDetails = async (req, res, next) => {
     });
   }
   if (quantity) {
-    if(quantity === fabric.quantity){
-      return next(errorHandler(401, "quantity must be different from previous quantity"));
-    }
+    // if(quantity === fabric.quantity){
+    //   return next(errorHandler(401, "quantity must be different from previous quantity"));
+    // }
     fabric.quantity = quantity;
   }
   if (weave) {

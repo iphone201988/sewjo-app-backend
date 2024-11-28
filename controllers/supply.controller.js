@@ -118,11 +118,11 @@ export const updateSupplyDetails = async (req, res, next) => {
     }
 
     if (quantity) {
-      if (quantity === supply.quantity) {
-        return next(
-          errorHandler(401, "quantity must be different from previous quantity")
-        );
-      }
+      // if (quantity === supply.quantity) {
+      //   return next(
+      //     errorHandler(401, "quantity must be different from previous quantity")
+      //   );
+      // }
       supply.quantity = quantity;
     }
     if (brands) {
