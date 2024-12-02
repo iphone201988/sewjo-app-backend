@@ -3,25 +3,20 @@ import path from "path";
 import { fileURLToPath } from "url";
 import fs from "fs";
 
-// Get the file's path and directory
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename).split("middlewares")[0];
 
-// Define the image directory path
 const imageDir = path.join(__dirname, "view", "image");
 
-// Check if the directory exists, if not, create it
 if (!fs.existsSync(imageDir)) {
-  fs.mkdirSync(imageDir, { recursive: true }); // Creates the directory and its parent directories if necessary
+  fs.mkdirSync(imageDir, { recursive: true });
 }
 
-// Set up multer storage configuration
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     let dir;
     const extension = path.extname(file.originalname).toLowerCase();
 
-    // Check file type, allow image types only
     if (/^\.(png|jpg|jpeg|gif)$/.test(extension)) {
       dir = imageDir;
     } else {
@@ -36,15 +31,13 @@ const storage = multer.diskStorage({
   },
 });
 
-// Single file upload configuration
 const uploadSingle = multer({
   storage: storage,
   limits: {
-    fileSize: 5 * 1024 * 1024, // 5MB limit
+    fileSize: 5 * 1024 * 1024, 
   },
 }).single("file");
 
-// Multiple files upload configuration
 const uploadMultiple = multer({
   storage: storage,
   limits: {

@@ -2,6 +2,46 @@ import Fabric from "../models/fabric.model.js";
 import History from "../models/updateHistory.model.js";
 import User from "../models/user.model.js";
 import { errorHandler } from "../utils/error.js";
+import path from "path";
+import { fileURLToPath } from "url";
+import fs from "fs";
+import { v4 as uuidv4 } from "uuid";
+import mime from "mime-types";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename).split("middlewares")[0];
+
+const imageDir = path.join(__dirname, "view", "image");
+
+if (!fs.existsSync(imageDir)) {
+  fs.mkdirSync(imageDir, { recursive: true });
+}
+
+export const base64Upload = async (req, res, next) => {
+  try {
+    if (!req.body.image || !req.body.image.startsWith("data:image")) {
+      throw new Error("Invalid or missing Base64 image data");
+    }
+    const base64Data = req.body.image.split(",")[1];
+    const mimeType = req.body.image.split(";")[0].split(":")[1];
+
+    const fileName = `${uuidv4()}-${Date.now()}.${mime.extension(mimeType)}`;
+    const filePath = path.join(imageDir, fileName);
+
+    const buffer = Buffer.from(base64Data, "base64");
+
+    fs.writeFileSync(filePath, buffer);
+
+    res.status(200).json({
+      success: true,
+      message: "Image uploaded successfully",
+      url: `${process.env.BASE_URL}/image/${fileName}`,
+    });
+  } catch (error) {
+    console.log("Error during Base64 upload:", error);
+    next(error);
+  }
+};
 
 export const singleUpload = async (req, res, next) => {
   try {
