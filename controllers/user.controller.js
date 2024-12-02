@@ -9,7 +9,7 @@ import { v4 as uuidv4 } from "uuid";
 import mime from "mime-types";
 
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename).split("middlewares")[0];
+const __dirname = path.dirname(__filename).split("controllers")[0];
 
 const imageDir = path.join(__dirname, "view", "image");
 
