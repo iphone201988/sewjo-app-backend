@@ -97,6 +97,14 @@ export const updatePattern = async (req, res, next) => {
     difficultyRating,
     notes,
     modification,
+    sizeUnit,
+    categoryType,
+    specificStyle,
+    isItemStitched,
+    patternView,
+    price,
+    priceUnit,
+    tags,
   } = req.body;
   try {
     const pattern = await Pattern.findOne({ _id: patternId, userRef: userId });
@@ -184,6 +192,31 @@ export const updatePattern = async (req, res, next) => {
     if (modification) {
       pattern.modification = modification;
     }
+    if (sizeUnit) {
+      pattern.sizeUnit = sizeUnit;
+    }
+    if (categoryType) {
+      pattern.categoryType = categoryType;
+    }
+    if (specificStyle) {
+      pattern.specificStyle = specificStyle;
+    }
+
+    if (isItemStitched) {
+      pattern.isItemStitched = isItemStitched;
+    }
+    if (patternView) {
+      pattern.patternView = patternView;
+    }
+    if (price) {
+      pattern.price = price;
+    }
+    if (priceUnit) {
+      pattern.priceUnit = priceUnit;
+    }
+    if (tags) {
+      pattern.tags = tags;
+    }
     await pattern.save();
     res.status(200).json({
       success: true,
@@ -214,4 +247,3 @@ export const deletePattern = async (req, res, next) => {
     next(error);
   }
 };
-

@@ -28,11 +28,9 @@ export const createPatternSchema = {
         "string.base": '"format" should be a type of string',
       }),
 
-    skillLevel: Joi.string()
-      ./* valid("Beginner", "Intermediate", "Advanced") */ optional()
-      .messages({
-        "string.base": '"skillLevel" should be a type of string',
-      }),
+    skillLevel: Joi.array().items(Joi.string()).optional().messages({
+      "array.base": '"skillLevel" should be an array of strings',
+    }),
 
     sizeMake: Joi.string().optional().messages({
       "string.base": '"sizeMake" should be a type of string',
@@ -56,8 +54,8 @@ export const createPatternSchema = {
       "string.base": '"specification" should be a type of string',
     }),
 
-    fabricRequirement: Joi.string().optional().messages({
-      "string.base": '"fabricRequirement" should be a type of string',
+    fabricRequirement: Joi.array().items(Joi.string()).optional().messages({
+      "array.base": '"fabricRequirement" should be an array of strings',
     }),
 
     notionRequirement: Joi.string().optional().messages({
@@ -124,10 +122,35 @@ export const createPatternSchema = {
     modification: Joi.string().optional().messages({
       "string.base": '"modification" should be a type of string',
     }),
+    sizeUnit: Joi.string().optional().messages({
+      "string.base": '"sizeUnit" should be a type of string',
+    }),
+    categoryType: Joi.array().items(Joi.string()).optional().messages({
+      "array.base": '"categoryType" should be an array of strings',
+    }),
+    specificStyle: Joi.array().items(Joi.string()).optional().messages({
+      "array.base": '"specificStyle" should be an array of strings',
+    }),
+    isItemStitched: Joi.boolean().optional(),
+    patternView: Joi.array().items(Joi.string()).optional().messages({
+      "array.base": '"patternView" should be an array of strings',
+    }),
+    fabricRequirement: Joi.array().items(Joi.string()).optional().messages({
+      "array.base": '"fabricRequirement" should be an array of strings',
+    }),
+    price: Joi.number().optional().messages({
+      "string.base": '"notes" should be a type of number',
+    }),
+    priceUnit: Joi.string().optional().messages({
+      "string.base": '"priceUnit" should be a type of string',
+    }),
+    tags: Joi.array().items(Joi.string()).optional().messages({
+      "array.base": '"tags" should be an array of strings',
+    }),
   }),
 };
 
-export const updatePatternSchema  = {
+export const updatePatternSchema = {
   params: Joi.object({
     id: Joi.string().required().messages({
       "string.base": '"id" should be a type of string',
@@ -156,11 +179,9 @@ export const updatePatternSchema  = {
         "string.base": '"format" should be a type of string',
       }),
 
-    skillLevel: Joi.string()
-      ./* valid("Beginner", "Intermediate", "Advanced"). */ optional()
-      .messages({
-        "string.base": '"skillLevel" should be a type of string',
-      }),
+    skillLevel: Joi.array().items(Joi.string()).optional().messages({
+      "array.base": '"skillLevel" should be an array of strings',
+    }),
 
     sizeMake: Joi.string().optional().messages({
       "string.base": '"sizeMake" should be a type of string',
@@ -183,11 +204,6 @@ export const updatePatternSchema  = {
     specification: Joi.string().optional().messages({
       "string.base": '"specification" should be a type of string',
     }),
-
-    fabricRequirement: Joi.string().optional().messages({
-      "string.base": '"fabricRequirement" should be a type of string',
-    }),
-
     notionRequirement: Joi.string().optional().messages({
       "string.base": '"notionRequirement" should be a type of string',
     }),
@@ -252,6 +268,31 @@ export const updatePatternSchema  = {
     modification: Joi.string().optional().messages({
       "string.base": '"modification" should be a type of string',
     }),
+    sizeUnit: Joi.string().optional().messages({
+      "string.base": '"sizeUnit" should be a type of string',
+    }),
+    categoryType: Joi.array().items(Joi.string()).optional().messages({
+      "array.base": '"categoryType" should be an array of strings',
+    }),
+    specificStyle: Joi.array().items(Joi.string()).optional().messages({
+      "array.base": '"specificStyle" should be an array of strings',
+    }),
+    isItemStitched: Joi.boolean().optional(),
+    patternView: Joi.array().items(Joi.string()).optional().messages({
+      "array.base": '"patternView" should be an array of strings',
+    }),
+    fabricRequirement: Joi.array().items(Joi.string()).optional().messages({
+      "array.base": '"fabricRequirement" should be an array of strings',
+    }),
+    price: Joi.number().optional().messages({
+      "string.base": '"notes" should be a type of number',
+    }),
+    priceUnit: Joi.string().optional().messages({
+      "string.base": '"priceUnit" should be a type of string',
+    }),
+    tags: Joi.array().items(Joi.string()).optional().messages({
+      "array.base": '"tags" should be an array of strings',
+    }),
   }),
 };
 
@@ -263,7 +304,7 @@ export const deletePatternSchema = {
   }),
 };
 
-export const getPatternDetailsSchema  = {
+export const getPatternDetailsSchema = {
   params: Joi.object({
     id: Joi.string().required().messages({
       "string.base": '"id" should be a type of string',
