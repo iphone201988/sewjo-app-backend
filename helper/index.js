@@ -71,5 +71,11 @@ export const fetchLinkedData = async (linkIds) => {
     pattern: linkedPatterns,
   };
 
-  return allLinkData;
+  const allProducts = [
+    ...linkedSupplies,
+    ...linkedFabrics,
+    ...linkedPatterns,
+  ];
+  allProducts.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  return allProducts;
 };
