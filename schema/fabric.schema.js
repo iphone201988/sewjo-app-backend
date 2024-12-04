@@ -36,6 +36,12 @@ export const createFabricSchema = {
     lengthValue: Joi.string().optional(),
     widthValue: Joi.string().optional(),
     lenghtType: Joi.string().optional(),
+    linkStash: Joi.array().items(Joi.string()).optional().messages({
+      "array.base": '"linkStash" should be an array of strings',
+    }),
+    linkStitchlog: Joi.array().items(Joi.string()).optional().messages({
+      "array.base": '"linkStitchlog" should be an array of strings',
+    }),
     variant: Joi.array()
       .items(Joi.object().pattern(Joi.string(), Joi.any()))
       .optional(),
@@ -82,6 +88,12 @@ export const updateFabricSchema = {
     lengthValue: Joi.string().optional(),
     widthValue: Joi.string().optional(),
     lenghtType: Joi.string().optional(),
+    linkStash: Joi.array().items(Joi.string()).optional().messages({
+      "array.base": '"linkStash" should be an array of strings',
+    }),
+    linkStitchlog: Joi.array().items(Joi.string()).optional().messages({
+      "array.base": '"linkStitchlog" should be an array of strings',
+    }),
     variant: Joi.array()
       .items(Joi.object().pattern(Joi.string(), Joi.any()))
       .optional(),

@@ -42,6 +42,8 @@ const patternSchema = new mongoose.Schema(
     price: { type: Number },
     priceUnit: { type: String, default: "CAD" },
     tags: { type: [String] },
+    linkStash:{ type: [String] },
+    linkStitchlog:{ type: [String] },
   },
   {
     timestamps: true,

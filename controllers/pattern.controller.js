@@ -1,5 +1,6 @@
 import Pattern from "../models/pattern.model.js";
 import { errorHandler } from "../utils/error.js";
+import { fetchLinkedData } from "../helper/index.js";
 
 export const createPattern = async (req, res, next) => {
   const userId = req.userId;
@@ -33,10 +34,21 @@ export const getPatternDetails = async (req, res, next) => {
     if (userId !== pattern.userRef) {
       return next(errorHandler(403, "You can only view your own pattern!"));
     }
+    
+    const allLinkStash = await fetchLinkedData(pattern.linkStash);
+    const allLinkStitchlog = await fetchLinkedData(pattern.linkStitchlog);
+
+    pattern.linkStash = undefined;
+    pattern.linkStitchlog = undefined;
+
     res.status(200).json({
       success: true,
       message: "pattern details retrieved successfully!",
-      pattern,
+      pattern: {
+        ...pattern.toObject(),
+        allLinkStash,
+        allLinkStitchlog,
+      },
     });
   } catch (error) {
     next(error);
@@ -58,7 +70,7 @@ export const getAllPattern = async (req, res, next) => {
     }
     res.status(200).json({
       success: true,
-      message: "Patterns retrieved successfully!",
+      message,
       patterns,
     });
   } catch (error) {
@@ -105,6 +117,8 @@ export const updatePattern = async (req, res, next) => {
     price,
     priceUnit,
     tags,
+    linkStash,
+    linkStitchlog,
   } = req.body;
   try {
     const pattern = await Pattern.findOne({ _id: patternId, userRef: userId });
@@ -216,6 +230,12 @@ export const updatePattern = async (req, res, next) => {
     }
     if (tags) {
       pattern.tags = tags;
+    }
+    if (linkStash) {
+      pattern.linkStash = linkStash;
+    }
+    if (linkStitchlog) {
+      pattern.linkStitchlog = linkStitchlog;
     }
     await pattern.save();
     res.status(200).json({

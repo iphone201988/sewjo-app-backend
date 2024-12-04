@@ -14,6 +14,8 @@ const supplySchema = new mongoose.Schema(
     tags: { type: [String], default: [] },
     notes: { type: String },
     userRef: { type: String },
+    linkStash:{ type: [String] },
+    linkStitchlog:{ type: [String] },
   },
   {
     timestamps: true,

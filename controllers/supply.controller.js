@@ -1,6 +1,7 @@
 import { errorHandler } from "../utils/error.js";
 import Supply from "../models/supply.model.js";
 import History from "../models/updateHistory.model.js";
+import { fetchLinkedData } from "../helper/index.js";
 
 export const createSupply = async (req, res, next) => {
   const userId = req.userId;
@@ -16,21 +17,32 @@ export const createSupply = async (req, res, next) => {
   }
 };
 
+
 export const getSupplyDetails = async (req, res, next) => {
   try {
-    const supply = await Supply.findById({
+    const supply = await Supply.findOne({
       _id: req.params.id,
       userRef: req.userId,
     });
+    
     if (!supply) {
       return next(errorHandler(404, "Supply not found!"));
     }
+
     if (req.userId !== supply.userRef) {
       return next(errorHandler(403, "You can only view your own supplies!"));
     }
+
     const history = await History.find({
       productRef: supply._id,
     }).sort({ createdAt: -1 });
+
+    const allLinkStash = await fetchLinkedData(supply.linkStash);
+    const allLinkStitchlog = await fetchLinkedData(supply.linkStitchlog);
+
+    supply.linkStash = undefined;
+    supply.linkStitchlog = undefined;
+
 
     return res.status(200).json({
       success: true,
@@ -38,12 +50,15 @@ export const getSupplyDetails = async (req, res, next) => {
       supply: {
         ...supply.toObject(),
         history,
+        allLinkStash,
+        allLinkStitchlog,
       },
     });
   } catch (error) {
     next(error);
   }
 };
+
 
 export const getAllSupplies = async (req, res, next) => {
   try {
@@ -83,6 +98,8 @@ export const updateSupplyDetails = async (req, res, next) => {
       tags,
       notes,
       reasons,
+      linkStash,
+      linkStitchlog,
     } = req.body;
     const supply = await Supply.findById(req.params.id);
     if (!supply) {
@@ -141,6 +158,12 @@ export const updateSupplyDetails = async (req, res, next) => {
     if (notes) {
       supply.notes = notes;
     }
+    if (linkStash) {
+      supply.linkStash = linkStash;
+    }
+    if(linkStitchlog){
+      supply.linkStitchlog = linkStitchlog;
+    }
 
     await supply.save();
     const history = await History.find({
@@ -171,7 +194,7 @@ export const deleteSupply = async (req, res, next) => {
     }
     await Supply.findByIdAndDelete(id);
     res.status(200).json({
-      succccess: true,
+      success: true,
       message: "Supply deleted successfully!",
     });
   } catch (error) {

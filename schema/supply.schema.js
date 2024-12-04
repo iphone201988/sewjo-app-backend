@@ -13,6 +13,12 @@ export const createSupplySchema = {
     currency: Joi.string().optional().default("CAD"),
     tags: Joi.array().items(Joi.string()).optional().default([]),
     notes: Joi.string().optional().default(""),
+    linkStash: Joi.array().items(Joi.string()).optional().messages({
+      "array.base": '"linkStash" should be an array of strings',
+    }),
+    linkStitchlog: Joi.array().items(Joi.string()).optional().messages({
+      "array.base": '"linkStitchlog" should be an array of strings',
+    })
   }),
 };
 
@@ -33,6 +39,12 @@ export const updateSupplySchema = {
     currency: Joi.string().optional().default("CAD"),
     tags: Joi.array().items(Joi.string()).optional().default([]),
     notes: Joi.string().optional().default(""),
+    linkStash: Joi.array().items(Joi.string()).optional().messages({
+      "array.base": '"linkStash" should be an array of strings',
+    }),
+    linkStitchlog: Joi.array().items(Joi.string()).optional().messages({
+      "array.base": '"linkStitchlog" should be an array of strings',
+    })
   }),
 };
 export const deletesupplySchema = {

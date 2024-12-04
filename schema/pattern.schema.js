@@ -23,7 +23,7 @@ export const createPatternSchema = {
     }),
 
     format: Joi.string()
-      ./* valid("PDF", "Physical", "Other"). */ optional()
+      .optional()
       .messages({
         "string.base": '"format" should be a type of string',
       }),
@@ -147,6 +147,12 @@ export const createPatternSchema = {
     tags: Joi.array().items(Joi.string()).optional().messages({
       "array.base": '"tags" should be an array of strings',
     }),
+    linkStash: Joi.array().items(Joi.string()).optional().messages({
+      "array.base": '"linkStash" should be an array of strings',
+    }),
+    linkStitchlog: Joi.array().items(Joi.string()).optional().messages({
+      "array.base": '"linkStitchlog" should be an array of strings',
+    })
   }),
 };
 
@@ -173,7 +179,7 @@ export const updatePatternSchema = {
       "array.base": '"patternType" should be an array of strings',
     }),
 
-    format: Joi.string() /* .valid("PDF", "Physical", "Other"). */
+    format: Joi.string()
       .optional()
       .messages({
         "string.base": '"format" should be a type of string',
@@ -292,6 +298,12 @@ export const updatePatternSchema = {
     }),
     tags: Joi.array().items(Joi.string()).optional().messages({
       "array.base": '"tags" should be an array of strings',
+    }),
+    linkStash: Joi.array().items(Joi.string()).optional().messages({
+      "array.base": '"linkStash" should be an array of strings',
+    }),
+    linkStitchlog: Joi.array().items(Joi.string()).optional().messages({
+      "array.base": '"linkStitchlog" should be an array of strings',
     }),
   }),
 };

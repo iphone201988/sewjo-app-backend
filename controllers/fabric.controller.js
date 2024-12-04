@@ -1,6 +1,7 @@
 import { errorHandler } from "../utils/error.js";
 import Fabric from "../models/fabric.model.js";
 import History from "../models/updateHistory.model.js";
+import { fetchLinkedData } from "../helper/index.js";
 
 export const createFabricStash = async (req, res, next) => {
   try {
@@ -33,12 +34,20 @@ export const getFabricDetails = async (req, res, next) => {
       productRef: fabric._id,
     }).sort({ createdAt: -1 });
 
+    const allLinkStash = await fetchLinkedData(fabric.linkStash);
+    const allLinkStitchlog = await fetchLinkedData(fabric.linkStitchlog);
+
+    fabric.linkStash = undefined;
+    fabric.linkStitchlog = undefined;
+
     return res.status(201).json({
       success: true,
       message: "Fabric Details found successfully!",
       fabric: {
         ...fabric.toObject(),
-        history
+        history,
+        allLinkStash,
+        allLinkStitchlog 
       }
     }); 
   } catch (error) {
@@ -112,6 +121,8 @@ export const updateFabricDetails = async (req, res, next) => {
     lengthValue,
     widthValue,
     variant,
+    linkStash,
+    linkStitchlog,
   } = req.body;
 
   
@@ -237,7 +248,12 @@ export const updateFabricDetails = async (req, res, next) => {
   if (variant) {
     fabric.variant = variant;
   }
-
+  if(linkStash){
+    fabric.linkStash = linkStash;
+  }
+  if(linkStitchlog){
+    fabric.linkStitchlog = linkStitchlog;
+  }
   history = await History.find({
     productRef: fabric._id,
   }).sort({ createdAt: -1 });
