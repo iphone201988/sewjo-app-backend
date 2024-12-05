@@ -4,7 +4,9 @@ import {
   deletePattern,
   getAllPattern,
   getPatternDetails,
+  GlobalPatternSearch,
   updatePattern,
+  updateSeachCount,
 } from "../controllers/pattern.controller.js";
 import { verifyToken } from "../middlewares/verifyUser.js";
 import validate from "../middlewares/validate.js";
@@ -42,5 +44,9 @@ router.delete(
   verifyToken,
   deletePattern
 );
+
+router.put("/search-count-update/:id",verifyToken,updateSeachCount);
+
+router.get("/global-pattern-search", verifyToken, GlobalPatternSearch);
 
 export default router;

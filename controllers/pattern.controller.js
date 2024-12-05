@@ -1,6 +1,7 @@
 import Pattern from "../models/pattern.model.js";
 import { errorHandler } from "../utils/error.js";
 import { fetchLinkedData } from "../helper/index.js";
+import mongoose from "mongoose";
 
 export const createPattern = async (req, res, next) => {
   const userId = req.userId;
@@ -34,7 +35,7 @@ export const getPatternDetails = async (req, res, next) => {
     if (userId !== pattern.userRef) {
       return next(errorHandler(403, "You can only view your own pattern!"));
     }
-    
+
     const allLinkStash = await fetchLinkedData(pattern.linkStash);
     const allLinkStitchlog = await fetchLinkedData(pattern.linkStitchlog);
 
@@ -44,7 +45,7 @@ export const getPatternDetails = async (req, res, next) => {
     res.status(200).json({
       success: true,
       message: "pattern details retrieved successfully!",
-      pattern
+      pattern,
     });
   } catch (error) {
     next(error);
@@ -69,6 +70,76 @@ export const getAllPattern = async (req, res, next) => {
       message,
       patterns,
     });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const GlobalPatternSearch = async (req, res, next) => {
+  try {
+    const limit = parseInt(req.query.limit) || 10;
+    const page = parseInt(req.query.page) || 1;
+    const search = req.query.search;
+    let qry = {};
+
+    if (search) {
+      qry = {
+        $or: [
+          { name: { $regex: search, $options: "i" } },
+          { brand: { $regex: search, $options: "i" } },
+          { tags: { $elemMatch: { $regex: search, $options: "i" } } },
+        ],
+      };
+    }
+
+    const skip = (page - 1) * limit;
+
+    const patterns = await Pattern.find(qry).skip(skip).limit(limit).exec();
+
+    const totalPatterns = await Pattern.countDocuments(qry);
+    const totalPages = Math.ceil(totalPatterns / limit);
+
+    let PopularPattern = [];
+    if (!search) {
+      PopularPattern = await Pattern.find({ searchCount: { $gt: 0 } })
+        .sort({ searchCount: -1 })
+        .limit(10);
+    }
+    let message;
+    if (patterns.length === 0) {
+      message = "No patterns found";
+    } else {
+      message = "Patterns retrieved successfully";
+    }
+    res.status(200).json({
+      success: true,
+      message,
+      patterns,
+      totalResults: totalPatterns,
+      currentPage: page,
+      limit,
+      totalPages,
+      ...(PopularPattern.length > 0 && { PopularPattern }),
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const updateSeachCount = async (req, res, next) => {
+  try {
+    const  id  = req.params.id;
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return next(errorHandler(400, "Invalid pattern ID!"));
+    }
+    const result = await Pattern.updateOne(
+      { _id: id },
+      { $inc: { searchCount: 1 } }
+    );
+    if (result.nModified === 0) {
+      return next(errorHandler(404, "Pattern not found!"));
+    }
+    res.status(200).json({ success: true, message: "Search count updated successfully" });
   } catch (error) {
     next(error);
   }
