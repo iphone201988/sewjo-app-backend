@@ -114,11 +114,11 @@ export const GlobalPatternSearch = async (req, res, next) => {
     res.status(200).json({
       success: true,
       message,
-      patterns,
-      totalResults: totalPatterns,
-      currentPage: page,
-      limit,
-      totalPages,
+      ...(search && { patterns }),
+      ...(search && { totalResults: totalPatterns }),
+      ...(search && { currentPage: page }),
+      ...(search && { limit }),
+      ...(search && { totalPages }),
       ...(PopularPattern.length > 0 && { PopularPattern }),
     });
   } catch (error) {
@@ -128,7 +128,7 @@ export const GlobalPatternSearch = async (req, res, next) => {
 
 export const updateSeachCount = async (req, res, next) => {
   try {
-    const  id  = req.params.id;
+    const id = req.params.id;
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return next(errorHandler(400, "Invalid pattern ID!"));
     }
@@ -139,7 +139,9 @@ export const updateSeachCount = async (req, res, next) => {
     if (result.nModified === 0) {
       return next(errorHandler(404, "Pattern not found!"));
     }
-    res.status(200).json({ success: true, message: "Search count updated successfully" });
+    res
+      .status(200)
+      .json({ success: true, message: "Search count updated successfully" });
   } catch (error) {
     next(error);
   }
