@@ -90,8 +90,8 @@ export const createPatternSchema = {
       "number.base": '"purchaseCost" should be a type of number',
     }),
 
-    patternLink: Joi.array().items(Joi.string().uri()).optional().messages({
-      "array.base": '"patternLink" should be an array of valid URLs',
+    patternLink: Joi.string().optional().messages({
+      "string.base": '"patternLink" should be a type of string',
     }),
 
     timesMade: Joi.number().optional().messages({
@@ -242,8 +242,8 @@ export const updatePatternSchema = {
       "number.base": '"purchaseCost" should be a type of number',
     }),
 
-    patternLink: Joi.array().items(Joi.string().uri()).optional().messages({
-      "array.base": '"patternLink" should be an array of valid URLs',
+    patternLink: Joi.string().optional().messages({
+      "string.base": '"patternLink" should be a type of string',
     }),
 
     timesMade: Joi.number().optional().messages({

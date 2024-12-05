@@ -20,7 +20,7 @@ const patternSchema = new mongoose.Schema(
     purchaseFrom: { type: String },
     purchaseDate: { type: String },
     purchaseCost: { type: Number },
-    patternLink: { type: [String] },
+    patternLink: { type: String },
     timesMade: { type: Number },
     successRating: { type: Number },
     makeAgain: {
