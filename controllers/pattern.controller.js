@@ -44,11 +44,7 @@ export const getPatternDetails = async (req, res, next) => {
     res.status(200).json({
       success: true,
       message: "pattern details retrieved successfully!",
-      pattern/* : {
-        ...pattern.toObject(),
-        allLinkStash,
-        allLinkStitchlog,
-      }, */
+      pattern
     });
   } catch (error) {
     next(error);
