@@ -167,8 +167,8 @@ const fabricSchema = new mongoose.Schema(
     variant: {
       type: Array,
     },
-    linkStash:{ type: [String] },
-    linkStitchlog:{ type: [String] },
+    linkStash:{ type: Array },
+    linkStitchlog:{ type: Array },
   },
   { timestamps: true }
 );

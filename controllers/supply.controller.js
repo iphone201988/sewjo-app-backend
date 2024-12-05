@@ -40,18 +40,18 @@ export const getSupplyDetails = async (req, res, next) => {
     const allLinkStash = await fetchLinkedData(supply.linkStash);
     const allLinkStitchlog = await fetchLinkedData(supply.linkStitchlog);
 
-    supply.linkStash = undefined;
-    supply.linkStitchlog = undefined;
+    supply.linkStash = allLinkStash;
+    supply.linkStitchlog = allLinkStitchlog;
 
 
     return res.status(200).json({
       success: true,
       message: "Supply details retrieved successfully!",
-      supply: {
+      supply : {
         ...supply.toObject(),
         history,
-        allLinkStash,
-        allLinkStitchlog,
+        // allLinkStash,
+        // allLinkStitchlog,
       },
     });
   } catch (error) {

@@ -38,17 +38,17 @@ export const getPatternDetails = async (req, res, next) => {
     const allLinkStash = await fetchLinkedData(pattern.linkStash);
     const allLinkStitchlog = await fetchLinkedData(pattern.linkStitchlog);
 
-    pattern.linkStash = undefined;
-    pattern.linkStitchlog = undefined;
+    pattern.linkStash = allLinkStash;
+    pattern.linkStitchlog = allLinkStitchlog;
 
     res.status(200).json({
       success: true,
       message: "pattern details retrieved successfully!",
-      pattern: {
+      pattern/* : {
         ...pattern.toObject(),
         allLinkStash,
         allLinkStitchlog,
-      },
+      }, */
     });
   } catch (error) {
     next(error);

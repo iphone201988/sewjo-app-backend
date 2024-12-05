@@ -37,17 +37,17 @@ export const getFabricDetails = async (req, res, next) => {
     const allLinkStash = await fetchLinkedData(fabric.linkStash);
     const allLinkStitchlog = await fetchLinkedData(fabric.linkStitchlog);
 
-    fabric.linkStash = undefined;
-    fabric.linkStitchlog = undefined;
+    fabric.linkStash = allLinkStash;
+    fabric.linkStitchlog = allLinkStitchlog;
 
     return res.status(201).json({
       success: true,
       message: "Fabric Details found successfully!",
       fabric: {
         ...fabric.toObject(),
-        history,
-        allLinkStash,
-        allLinkStitchlog 
+        history
+        // allLinkStash,
+        // allLinkStitchlog 
       }
     }); 
   } catch (error) {
