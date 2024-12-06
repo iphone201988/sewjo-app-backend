@@ -87,6 +87,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 app.use("/image", express.static(path.join(__dirname, "view/image")));
+app.use("/pdf", express.static(path.join(__dirname, "view/pdf")));
 
 
 // Use routers
