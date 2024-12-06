@@ -6,6 +6,6 @@ const router = express.Router();
 
 router.post("/file", upload.uploadSingle, singleUpload);
 router.post("/multifile", upload.uploadMultiple, multiUpload);
-router.post("/image",base64Upload);
+router.post("/file-upload",base64Upload);
 
 export default router;

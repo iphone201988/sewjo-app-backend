@@ -12,30 +12,47 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename).split("controllers")[0];
 
 const imageDir = path.join(__dirname, "view", "image");
+const pdfDir = path.join(__dirname, "view", "pdf");
 
 if (!fs.existsSync(imageDir)) {
   fs.mkdirSync(imageDir, { recursive: true });
 }
 
+if (!fs.existsSync(pdfDir)) {
+  fs.mkdirSync(pdfDir, { recursive: true });
+}
+
 export const base64Upload = async (req, res, next) => {
   try {
-    if (!req.body.image || !req.body.image.startsWith("data:image")) {
-      throw new Error("Invalid or missing Base64 image data");
+    if (!req.body.file || !req.body.file.startsWith("data:")) {
+      throw new Error("Invalid or missing Base64 data");
     }
-    const base64Data = req.body.image.split(",")[1];
-    const mimeType = req.body.image.split(";")[0].split(":")[1];
-
-    const fileName = `${uuidv4()}-${Date.now()}.${mime.extension(mimeType)}`;
-    const filePath = path.join(imageDir, fileName);
-
+    const base64Data = req.body.file.split(",")[1];
+    const mimeType = req.body.file.split(";")[0].split(":")[1];
+    const fileExtension = mime.extension(mimeType);
+    if (!fileExtension) {
+      throw new Error("Unsupported file type");
+    }
+    const fileName = `${uuidv4()}-${Date.now()}.${fileExtension}`;
+    let filePath;
+    if (mimeType.startsWith("image/")) {
+      filePath = path.join(imageDir, fileName);
+    } else if (mimeType === "application/pdf") {
+      filePath = path.join(pdfDir, fileName);
+    } else {
+      throw new Error("Unsupported file type");
+    }
     const buffer = Buffer.from(base64Data, "base64");
-
     fs.writeFileSync(filePath, buffer);
-
+    const fileUrl = mimeType.startsWith("image/")
+      ? `${process.env.BASE_URL}/image/${fileName}`
+      : `${process.env.BASE_URL}/pdf/${fileName}`;
     res.status(200).json({
       success: true,
-      message: "Image uploaded successfully",
-      url: `${process.env.BASE_URL}/image/${fileName}`,
+      message: `${
+        mimeType.startsWith("image/") ? "Image" : "PDF"
+      } uploaded successfully`,
+      url: fileUrl,
     });
   } catch (error) {
     console.log("Error during Base64 upload:", error);
