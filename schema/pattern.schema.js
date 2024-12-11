@@ -155,7 +155,16 @@ export const createPatternSchema = {
     }),
     isPublic: Joi.boolean().optional().messages({
       "boolean.base": '"isPublic" should be a type of boolean',
-    })
+    }),
+    addedValues: Joi.array().optional().messages({
+      "array.base": '"addedValues" should be an array if provided',
+    }),
+    viewSizes: Joi.array().optional().messages({
+      "array.base": '"viewSizes" should be an array if provided',
+    }),
+    numberOfPrice: Joi.string().optional().messages({
+      "string.base": '"numberOfPrice" should be a type of string',
+    }),
   }),
 };
 
@@ -310,7 +319,16 @@ export const updatePatternSchema = {
     }),
     isPublic: Joi.boolean().optional().messages({
       "boolean.base": '"isPublic" should be a type of boolean',
-    })
+    }),
+    addedValues: Joi.array().optional().messages({
+      "array.base": '"addedValues" should be an array if provided',
+    }),
+    viewSizes: Joi.array().optional().messages({
+      "array.base": '"viewSizes" should be an array if provided',
+    }),
+    numberOfPrice: Joi.string().optional().messages({
+      "string.base": '"numberOfPrice" should be a type of string',
+    }),
   }),
 };
 

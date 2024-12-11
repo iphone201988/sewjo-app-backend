@@ -192,6 +192,9 @@ export const updatePattern = async (req, res, next) => {
     linkStash,
     linkStitchlog,
     isPublic,
+    numberOfPrice,
+    viewSizes,
+    addedValues
   } = req.body;
   try {
     const pattern = await Pattern.findOne({ _id: patternId, userRef: userId });
@@ -312,6 +315,15 @@ export const updatePattern = async (req, res, next) => {
     }
     if (isPublic) {
       pattern.isPublic = isPublic;
+    }
+    if (numberOfPrice) {
+      pattern.numberOfPrice = numberOfPrice;
+    }
+    if (viewSizes) {
+      pattern.viewSizes = viewSizes;
+    }
+    if (addedValues) {
+      pattern.addedValues = addedValues;
     }
     await pattern.save();
     res.status(200).json({
