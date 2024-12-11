@@ -152,6 +152,9 @@ export const createPatternSchema = {
     }),
     linkStitchlog: Joi.array().items(Joi.string()).optional().messages({
       "array.base": '"linkStitchlog" should be an array of strings',
+    }),
+    isPublic: Joi.boolean().optional().messages({
+      "boolean.base": '"isPublic" should be a type of boolean',
     })
   }),
 };
@@ -305,6 +308,9 @@ export const updatePatternSchema = {
     linkStitchlog: Joi.array().items(Joi.string()).optional().messages({
       "array.base": '"linkStitchlog" should be an array of strings',
     }),
+    isPublic: Joi.boolean().optional().messages({
+      "boolean.base": '"isPublic" should be a type of boolean',
+    })
   }),
 };
 

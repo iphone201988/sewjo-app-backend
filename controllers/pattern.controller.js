@@ -80,10 +80,10 @@ export const GlobalPatternSearch = async (req, res, next) => {
     const limit = parseInt(req.query.limit) || 10;
     const page = parseInt(req.query.page) || 1;
     const search = req.query.search;
-    let qry = {};
-
+    let qry = { isPublic: true };
     if (search) {
       qry = {
+        ...qry,
         $or: [
           { name: { $regex: search, $options: "i" } },
           { brand: { $regex: search, $options: "i" } },
@@ -101,7 +101,10 @@ export const GlobalPatternSearch = async (req, res, next) => {
 
     let PopularPattern = [];
     if (!search) {
-      PopularPattern = await Pattern.find({ searchCount: { $gt: 0 } })
+      PopularPattern = await Pattern.find({
+        searchCount: { $gt: 0 },
+        isPublic: true,
+      })
         .sort({ searchCount: -1 })
         .limit(10);
     }
@@ -188,6 +191,7 @@ export const updatePattern = async (req, res, next) => {
     tags,
     linkStash,
     linkStitchlog,
+    isPublic,
   } = req.body;
   try {
     const pattern = await Pattern.findOne({ _id: patternId, userRef: userId });
@@ -305,6 +309,9 @@ export const updatePattern = async (req, res, next) => {
     }
     if (linkStitchlog) {
       pattern.linkStitchlog = linkStitchlog;
+    }
+    if (isPublic) {
+      pattern.isPublic = isPublic;
     }
     await pattern.save();
     res.status(200).json({
