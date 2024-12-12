@@ -322,8 +322,8 @@ export const updatePattern = async (req, res, next) => {
     if (addedValues) {
       pattern.addedValues = addedValues;
     }
-    
-    pattern.isPublic = isPublic ||pattern.isPublic;
+
+    pattern.isPublic = isPublic ?? pattern.isPublic;
 
     await pattern.save();
     res.status(200).json({
