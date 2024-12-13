@@ -4,12 +4,9 @@ import Review from "../models/review.model.js";
 export const addRating = async (req, res, next) => {
   try {
     const userId = req.userId;
-    const { productRef, comment, rating } = req.body;
     const review = await Review.create({
-      comment,
+      ...req.body,
       userRef: userId,
-      productRef,
-      rating
     });
     res.status(200).json({
       success: true,
@@ -94,8 +91,15 @@ export const getRatings = async (req, res, next) => {
         $project: {
           _id: 1,
           rating: 1,
-          comment: 1,
+          title: 1,
+          description: 1,
+          size: 1,
+          fabricUse: 1,
+          imageUrls: 1,
+          isPublic: 1,
           productRef: 1,
+          notWorked: 1,
+          worked: 1,
           createdAt: 1,
           updatedAt: 1,
           "userDetails._id": 1,

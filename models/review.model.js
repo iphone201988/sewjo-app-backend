@@ -2,10 +2,6 @@ import mongoose from "mongoose";
 
 const reviewSchema = new mongoose.Schema(
   {
-    // type: {
-    //   type: String,
-    //   enum: ["Fabric", "Supply", "Pattern"],
-    // },
     userRef: {
       type: mongoose.Types.ObjectId,
       ref: "User",
@@ -17,9 +13,31 @@ const reviewSchema = new mongoose.Schema(
     rating: {
       type: Number,
     },
-    comment: {
+    title:{
       type: String,
     },
+    description: {
+      type: String,
+    },
+    size:{
+      type: String,
+    },
+    fabricUse:{
+      type: String,
+    },
+    imageUrls: {
+      type: [String],
+    },
+    isPublic:{
+      type: Boolean,
+      default: false,
+    },
+    notWorked:{
+      type: [String],
+    },
+    worked:{
+      type: [String],
+    }
   },
   {
     timestamps: true,
