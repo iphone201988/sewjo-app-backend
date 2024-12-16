@@ -162,6 +162,9 @@ export const createPatternSchema = {
     viewSizes: Joi.array().optional().messages({
       "array.base": '"viewSizes" should be an array if provided',
     }),
+    imageTags: Joi.array().optional().messages({
+      "array.base": '"imageTags" should be an array if provided',
+    }),
     numberOfPrice: Joi.string().optional().messages({
       "string.base": '"numberOfPrice" should be a type of string',
     }),
@@ -325,6 +328,9 @@ export const updatePatternSchema = {
     }),
     viewSizes: Joi.array().optional().messages({
       "array.base": '"viewSizes" should be an array if provided',
+    }),
+    imageTags: Joi.array().optional().messages({
+      "array.base": '"imageTags" should be an array if provided',
     }),
     numberOfPrice: Joi.string().optional().messages({
       "string.base": '"numberOfPrice" should be a type of string',

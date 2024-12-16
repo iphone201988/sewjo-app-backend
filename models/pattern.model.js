@@ -49,6 +49,7 @@ const patternSchema = new mongoose.Schema(
     addedValues: { type: Array },
     viewSizes: { type: Array },
     numberOfPrice: { type: String },
+    imageTags: { type: Array },
   },
   {
     timestamps: true,
