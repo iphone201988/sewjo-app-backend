@@ -144,6 +144,9 @@ export const createPatternSchema = {
     priceUnit: Joi.string().optional().messages({
       "string.base": '"priceUnit" should be a type of string',
     }),
+    uploadFiles: Joi.string().optional().messages({
+      "string.base": '"uploadFiles" should be a type of string',
+    }),
     tags: Joi.array().items(Joi.string()).optional().messages({
       "array.base": '"tags" should be an array of strings',
     }),
@@ -334,6 +337,9 @@ export const updatePatternSchema = {
     }),
     numberOfPrice: Joi.string().optional().messages({
       "string.base": '"numberOfPrice" should be a type of string',
+    }),
+    uploadFiles: Joi.string().optional().messages({
+      "string.base": '"uploadFiles" should be a type of string',
     }),
   }),
 };

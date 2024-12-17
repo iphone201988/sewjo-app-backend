@@ -195,7 +195,8 @@ export const updatePattern = async (req, res, next) => {
     numberOfPrice,
     viewSizes,
     addedValues,
-    imageTags
+    imageTags,
+    uploadFiles
   } = req.body;
   try {
     const pattern = await Pattern.findOne({ _id: patternId, userRef: userId });
@@ -325,6 +326,9 @@ export const updatePattern = async (req, res, next) => {
     }
     if(imageTags){
       pattern.imageTags = imageTags;
+    }
+    if(uploadFiles){
+      pattern.uploadFiles = uploadFiles;
     }
 
     pattern.isPublic = isPublic ?? pattern.isPublic;
