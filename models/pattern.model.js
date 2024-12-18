@@ -50,7 +50,7 @@ const patternSchema = new mongoose.Schema(
     viewSizes: { type: Array },
     numberOfPrice: { type: String },
     imageTags: { type: Array },
-    uploadFiles: { type: String },
+    uploadFiles: { type: Array },
   },
   {
     timestamps: true,
