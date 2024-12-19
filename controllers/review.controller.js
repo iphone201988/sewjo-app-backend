@@ -31,7 +31,7 @@ export const getRatings = async (req, res, next) => {
       : productRef;
 
     const reviewsAggregation = Review.aggregate([
-      { $match: { productRef: productRefObjectId , isPublic:true } },
+      { $match: { productRef: productRefObjectId } },
       { $skip: skip },
       { $limit: limit },
       {
@@ -116,9 +116,9 @@ export const getRatings = async (req, res, next) => {
 
     const [reviews, totalReviews, avgRating] = await Promise.all([
       reviewsAggregation,
-      Review.countDocuments({ productRef: productRefObjectId,isPublic:true }),
+      Review.countDocuments({ productRef: productRefObjectId }),
       Review.aggregate([
-        { $match: { productRef: productRefObjectId,isPublic:true } },
+        { $match: { productRef: productRefObjectId } },
         { $group: { _id: null, avgRating: { $avg: "$rating" } } },
       ]),
     ]);
