@@ -118,7 +118,7 @@ export const getRatings = async (req, res, next) => {
       reviewsAggregation,
       Review.countDocuments({ productRef: productRefObjectId,isPublic:true }),
       Review.aggregate([
-        { $match: { productRef: productRefObjectId } },
+        { $match: { productRef: productRefObjectId,isPublic:true } },
         { $group: { _id: null, avgRating: { $avg: "$rating" } } },
       ]),
     ]);
