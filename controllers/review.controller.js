@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import Review from "../models/review.model.js";
+import { errorHandler } from "../utils/error.js";
 
 export const addRating = async (req, res, next) => {
   try {
@@ -30,7 +31,7 @@ export const getRatings = async (req, res, next) => {
       : productRef;
 
     const reviewsAggregation = Review.aggregate([
-      { $match: { productRef: productRefObjectId } },
+      { $match: { productRef: productRefObjectId , isPublic:true } },
       { $skip: skip },
       { $limit: limit },
       {
@@ -100,6 +101,8 @@ export const getRatings = async (req, res, next) => {
           productRef: 1,
           notWorked: 1,
           worked: 1,
+          like:1,
+          disLike:1,
           createdAt: 1,
           updatedAt: 1,
           "userDetails._id": 1,
@@ -113,7 +116,7 @@ export const getRatings = async (req, res, next) => {
 
     const [reviews, totalReviews, avgRating] = await Promise.all([
       reviewsAggregation,
-      Review.countDocuments({ productRef: productRefObjectId }),
+      Review.countDocuments({ productRef: productRefObjectId,isPublic:true }),
       Review.aggregate([
         { $match: { productRef: productRefObjectId } },
         { $group: { _id: null, avgRating: { $avg: "$rating" } } },
@@ -145,6 +148,55 @@ export const getRatings = async (req, res, next) => {
   }
 };
 
+export const updateRating = async (req, res, next) => {
+  try {
+    const id = req.params.id;
+    const { rating, title, description, size, fabricUse, imageUrls, isPublic, notWorked, worked } = req.body;
+    const review = await Review.findById(id);
+    if (!review) {
+      return next(errorHandler(404, "Review not found"));
+    }
+    if (req.userId!== review.userRef) {
+      return next(errorHandler(401, "You can only update your own reviews!"));
+    }
+    if(rating){
+      review.rating = rating;
+    }
+    if(title){
+      review.title = title;
+    }
+    if(description){
+      review.description = description;
+    }
+    if(size){
+      review.size = size;
+    }
+    if(fabricUse){
+      review.fabricUse = fabricUse;
+    }
+    if(imageUrls){
+      review.imageUrls = imageUrls;
+    }
+
+    review.isPublic = isPublic;
+    
+    if(notWorked){
+      review.notWorked = notWorked;
+    }
+    if(worked){
+      review.worked = worked;
+    }
+    await review.save();
+    res.status(200).json({
+      success: true,
+      message: "Review updated successfully",
+      review,
+    });   
+  } catch (error) {
+    next(error);
+  }
+}
+
 export const deleteRating = async (req, res, next) => {
   try {
     const id = req.params.id;
@@ -161,3 +213,127 @@ export const deleteRating = async (req, res, next) => {
     next(error);
   }
 };
+
+
+export const LikeUnlikeReview = async(req, res, next) => {
+  try {
+    const id = req.params.id;
+    const userId = req.userId;
+
+    const review = await Review.findById(id);
+    
+    if (!review) {
+      return next(errorHandler(404, "Review not found!"));
+    }
+    let message;
+    if (review.like.includes(userId)) {
+      review.like = review.like.filter((user) => user.toString() !== userId.toString());
+      message = "Unliked successfully";
+    } else {
+      review.like.push(userId);
+      message = "Liked successfully";
+    } 
+    if (review.disLike.includes(userId)) {
+      review.disLike = review.disLike.filter((user) => user.toString() !== userId.toString());
+    }
+    await review.save();
+    res.status(200).json({
+      success: true,
+      message,
+      Like: review.like,
+      Dislike: review.disLike,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const dislikeUndislike = async(req,res,next)=>{
+  try {
+    const id = req.params.id;
+    const userId = req.userId;
+    const review = await Review.findById(id);
+    
+    if (!review) {
+      return next(errorHandler(404, "Review not found!"));
+    }
+    let message;
+    if (review.disLike.includes(userId)) {
+      review.disLike = review.disLike.filter((user) => user.toString() !== userId.toString());
+      message = "disLike removed successfully";
+    } else {
+      review.disLike.push(userId);
+      message = "disLike successfully";
+    } 
+    if (review.like.includes(userId)) {
+      review.like = review.like.filter((user) => user.toString() !== userId.toString());
+    }
+    await review.save();
+    res.status(200).json({
+      success: true,
+      message,
+      Like: review.like,
+      Dislike: review.disLike,
+    }); 
+  } catch (error) {
+    next(error);  
+  }
+}
+
+
+export const likeDislike = async (req, res, next) => {
+  try {
+    const { type } = req.body;
+
+    const id = req.params.id;
+
+    const userId = req.userId;
+
+    if (type !== 'like' && type !== 'dislike') {
+      return next(errorHandler(400, `Invalid type. It must be "like" or "dislike". `));
+    }
+
+    const review = await Review.findById(id);
+    
+    if (!review) {
+      return next(errorHandler(404, 'Review not found!'));
+    }
+
+    let message;
+    if (type === 'like') {
+      if (review.like.includes(userId)) {
+        review.like = review.like.filter(user => user.toString() !== userId.toString());
+        message = 'Unliked successfully';
+      } else {
+        review.like.push(userId);
+        message = 'Liked successfully';
+      }
+      if (review.disLike.includes(userId)) {
+        review.disLike = review.disLike.filter(user => user.toString() !== userId.toString());
+      }
+    } else if (type === 'dislike') {
+      if (review.disLike.includes(userId)) {
+        review.disLike = review.disLike.filter(user => user.toString() !== userId.toString());
+        message = 'Dislike removed successfully';
+      } else {
+        review.disLike.push(userId);
+        message = 'Disliked successfully';
+      }
+      if (review.like.includes(userId)) {
+        review.like = review.like.filter(user => user.toString() !== userId.toString());
+      }
+    }
+    await review.save();
+    res.status(200).json({
+      success: true,
+      message,
+      Like: review.like,
+      Dislike: review.disLike,
+    });
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
+

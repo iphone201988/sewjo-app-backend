@@ -13,31 +13,43 @@ const reviewSchema = new mongoose.Schema(
     rating: {
       type: Number,
     },
-    title:{
+    title: {
       type: String,
     },
     description: {
       type: String,
     },
-    size:{
+    size: {
       type: String,
     },
-    fabricUse:{
+    fabricUse: {
       type: String,
     },
     imageUrls: {
       type: [String],
     },
-    isPublic:{
+    isPublic: {
       type: Boolean,
       default: false,
     },
-    notWorked:{
+    notWorked: {
       type: [String],
     },
-    worked:{
+    worked: {
       type: [String],
-    }
+    },
+    like: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
+    disLike: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
   },
   {
     timestamps: true,

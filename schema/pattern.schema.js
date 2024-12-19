@@ -340,7 +340,7 @@ export const updatePatternSchema = {
     }),
     numberOfPrice: Joi.string().optional().messages({
       "string.base": '"numberOfPrice" should be a type of string',
-    })
+    }),
   }),
 };
 
