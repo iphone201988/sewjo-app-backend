@@ -125,10 +125,10 @@ export const getRatings = async (req, res, next) => {
 
     let averageRating = avgRating.length > 0 ? avgRating[0].avgRating : 0;
 
-    averageRating = averageRating.toFixed(2);
+    averageRating = parseFloat(averageRating).toFixed(2);
 
-    if(averageRating == 0.00){
-      averageRating = 0.0;
+    if (averageRating === "0.00") {
+     averageRating = parseFloat(averageRating).toFixed(1);
     }
 
     const totalPages = Math.ceil(totalReviews / limit);
