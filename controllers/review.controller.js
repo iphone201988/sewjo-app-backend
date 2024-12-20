@@ -127,14 +127,19 @@ export const getRatings = async (req, res, next) => {
 
     averageRating = averageRating.toFixed(2);
 
+    if(averageRating == 0.00){
+      averageRating = 0.0;
+    }
+
     const totalPages = Math.ceil(totalReviews / limit);
-    
+
     let message;
     if (reviews.length === 0) {
       message = "No reviews found for this product";
     } else {
       message = "Reviews found for this product";
     }
+    
 
     res.status(200).json({
       success: true,
