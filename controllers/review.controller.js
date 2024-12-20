@@ -123,9 +123,12 @@ export const getRatings = async (req, res, next) => {
       ]),
     ]);
 
-    const averageRating = avgRating.length > 0 ? avgRating[0].avgRating : 0;
-    const totalPages = Math.ceil(totalReviews / limit);
+    let averageRating = avgRating.length > 0 ? avgRating[0].avgRating : 0;
 
+    averageRating = averageRating.toFixed(2);
+
+    const totalPages = Math.ceil(totalReviews / limit);
+    
     let message;
     if (reviews.length === 0) {
       message = "No reviews found for this product";
