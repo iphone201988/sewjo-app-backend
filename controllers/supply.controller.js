@@ -6,11 +6,28 @@ import { fetchLinkedData } from "../helper/index.js";
 export const createSupply = async (req, res, next) => {
   const userId = req.userId;
   try {
-    const supply = await Supply.create({ ...req.body, userRef: userId });
-    return res.status(201).json({
+  const supply = await Supply.create({ ...req.body, userRef: userId });
+  let history;
+  if(supply){
+    await History.create({
+      productRef: supply._id,
+      reasons:"Added New Stock",
+      preQuantity: 0,
+      curQuantity:supply.quantity,
+    });
+  }
+
+  history = await History.find({
+    productRef: supply._id,
+  }).sort({ createdAt: -1 });
+
+  return res.status(201).json({
       success: true,
       message: "Supply created successfully!",
-      supply,
+      supply:{
+        ...supply.toObject(),
+        history
+      },
     });
   } catch (error) {
     next(error);

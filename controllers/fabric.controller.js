@@ -5,15 +5,31 @@ import { fetchLinkedData } from "../helper/index.js";
 
 export const createFabricStash = async (req, res, next) => {
   try {
-    const userId = req.userId;
-    const fabric = await Fabric.create({
+  const userId = req.userId;
+  const fabric = await Fabric.create({
       ...req.body,
       userRef: userId,
     });
-    return res.status(201).json({
+  let history;
+  if(fabric){
+    await History.create({
+      productRef: fabric._id,
+      reasons:"Added New Stock",
+      preQuantity: 0,
+      curQuantity:fabric.quantity,
+    });
+  }
+  history = await History.find({
+    productRef: fabric._id,
+  }).sort({ createdAt: -1 });
+
+  return res.status(201).json({
       success: true,
       message: "Fabric added successfully!",
-      fabric,
+      fabric:{
+        ...fabric.toObject(),
+        history
+      },
     });
   } catch (error) {
     next(error);

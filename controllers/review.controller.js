@@ -164,11 +164,9 @@ export const updateRating = async (req, res, next) => {
     if (!review) {
       return next(errorHandler(404, "Review not found"));
     }
-    
     if (req.userId.toString()!== review.userRef.toString()) {
       return next(errorHandler(401, "You can only update your own reviews!"));
     }
-
     if(rating){
       review.rating = rating;
     }
@@ -193,9 +191,11 @@ export const updateRating = async (req, res, next) => {
     if(notWorked){
       review.notWorked = notWorked;
     }
+
     if(worked){
       review.worked = worked;
     }
+    
     await review.save();
     res.status(200).json({
       success: true,
