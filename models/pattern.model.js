@@ -45,7 +45,7 @@ const patternSchema = new mongoose.Schema(
     linkStash: { type: Array },
     linkStitchlog: { type: Array },
     searchCount: { type: Number, default: 0 },
-    isPublic: { type: Boolean, default: false },
+    isPublic: { type: Boolean, default: true },
     addedValues: { type: Array },
     viewSizes: { type: Array },
     numberOfPrice: { type: String },
