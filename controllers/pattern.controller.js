@@ -80,7 +80,7 @@ export const GlobalPatternSearch = async (req, res, next) => {
     const limit = parseInt(req.query.limit) || 10;
     const page = parseInt(req.query.page) || 1;
     const search = req.query.search;
-    let qry = { isPublic: false };
+    let qry = { isPublic: true };
     if (search) {
       qry = {
         ...qry,
@@ -103,7 +103,7 @@ export const GlobalPatternSearch = async (req, res, next) => {
     if (!search) {
       PopularPattern = await Pattern.find({
         searchCount: { $gt: 0 },
-        isPublic: false,
+        isPublic: true,
       })
         .sort({ searchCount: -1 })
         .limit(10);
