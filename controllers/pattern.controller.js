@@ -103,7 +103,7 @@ export const GlobalPatternSearch = async (req, res, next) => {
     if (!search) {
       PopularPattern = await Pattern.find({
         searchCount: { $gt: 0 },
-        isPublic: true,
+        isPublic: false,
       })
         .sort({ searchCount: -1 })
         .limit(10);
