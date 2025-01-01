@@ -20,6 +20,11 @@ export const generateToken = (payload) => {
   return jwt.sign(payload, secretKey, { expiresIn: "30d" });
 };
 
+// export const generateToken = (payload) => {
+//   const secretKey = process.env.JWT_SECRET;
+//   return jwt.sign(payload, secretKey); 
+// };
+
 export const validateToken = (token) => {
   const secretKey = process.env.JWT_SECRET;
   try {

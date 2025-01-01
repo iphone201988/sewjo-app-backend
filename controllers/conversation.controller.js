@@ -32,16 +32,17 @@ export const createConversation = async (req, res) => {
   }
 };
 
-// Get all conversations for a user
+// Get all conversations for a user, excluding hidden ones
 export const getConversations = async (req, res) => {
   const { userId } = req.params;
 
   try {
     const conversations = await Conversation.find({
       participants: userId,
+      hiddenFor: { $ne: userId }, // Exclude conversations hidden for this user
     })
-      .populate('lastMessage')  // Populates the last message details
-      .populate('participants', 'displayName profileImage')  // Populates participant info
+      .populate('lastMessage')
+      .populate('participants', 'displayName profileImage')
       .exec();
 
     res.status(200).json(conversations);
@@ -90,26 +91,48 @@ export const markMessagesAsRead = async (req, res) => {
 
 // Create a new conversation or get existing one
 export const getConversationId = async (req, res) => {
-    const { sender_id, receiver_id } = req.body;
-    
+  const { sender_id, receiver_id } = req.body;
 
-    try {
-        // Check if a conversation exists
-        let conversation = await Conversation.findOne({
-            participants: { $all: [sender_id, receiver_id] },
-        });
+  try {
+    // Check if a conversation exists
+    let conversation = await Conversation.findOne({
+      participants: { $all: [sender_id, receiver_id] },
+    });
 
-        // If no conversation exists, create a new one
-        if (!conversation) {
-            conversation = new Conversation({
-                participants: [sender_id, receiver_id],
-            });
-            await conversation.save();
-        }
-
-        // Return the conversationId
-        res.status(200).json({ conversationId: conversation._id });
-    } catch (error) {
-        res.status(500).json({ message: "Failed to retrieve or create conversation." });
+    // If no conversation exists, create a new one
+    if (!conversation) {
+      conversation = new Conversation({
+        participants: [sender_id, receiver_id],
+      });
+      await conversation.save();
     }
+
+    // Return the conversationId
+    res.status(200).json({ conversationId: conversation._id });
+  } catch (error) {
+    res.status(500).json({ message: "Failed to retrieve or create conversation." });
+  }
+};
+
+// Hide a conversation for a specific user
+export const hideConversation = async (req, res) => {
+  const { conversationId, userId } = req.body;
+
+  try {
+    const conversation = await Conversation.findById(conversationId);
+
+    if (!conversation) {
+      return res.status(404).json({ message: "Conversation not found" });
+    }
+
+    // Add userId to hiddenFor array if not already present
+    if (!conversation.hiddenFor.includes(userId)) {
+      conversation.hiddenFor.push(userId);
+      await conversation.save();
+    }
+
+    res.status(200).json({ message: "Conversation hidden successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Failed to hide conversation" });
+  }
 };

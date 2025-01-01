@@ -6,14 +6,18 @@ import { Server } from "socket.io";
 import userRouter from "./routes/user.route.js";
 import authRouter from "./routes/auth.route.js";
 import fabricRouter from "./routes/fabric.route.js";
-import messageRouter from "./routes/message.route.js";
-import conversationRouter from "./routes/conversation.route.js";
 import supplyRouter from "./routes/supply.route.js"; // Import the supply router
 import uploadRoute from "./routes/upload.route.js"
 import fieldRoute from "./routes/fabricFields.js";
 import orderRoute from "./routes/order.route.js";
 import patternRoute from "./routes/pattern.route.js";
 import reviewRoute from "./routes/review.route.js";
+import messageRouter from "./routes/message.route.js";
+import conversationRouter from "./routes/conversation.route.js"
+import circlePostRouter from "./routes/circlePost.route.js"
+import circleRouter from "./routes/circle.route.js";
+import commentRouter from "./routes/comment.route.js";
+import commentReplyRouter from "./routes/commentReply.route.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import path from 'path';
@@ -102,6 +106,12 @@ app.use("/api/field", fieldRoute);
 app.use("/api/order", orderRoute);
 app.use("/api/pattern",patternRoute);
 app.use("/api/review", reviewRoute);
+app.use('/api/message', messageRouter);
+app.use('/api/conversation', conversationRouter);
+app.use("/api/circles", circleRouter);
+app.use('/api/circle-posts', circlePostRouter);
+app.use("/api/comments", commentRouter);
+app.use("/api/comment-replies", commentReplyRouter);
 
 
 

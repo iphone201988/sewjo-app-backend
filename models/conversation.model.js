@@ -15,8 +15,11 @@ const conversationSchema = new mongoose.Schema({
       of: Number, // Tracks unread messages for each user
       default: {}
     },
-  }, { timestamps: true });
-  
+    hiddenFor: { // Array to track users who have hidden this conversation
+      type: [mongoose.Schema.Types.ObjectId],
+      default: [],
+    },
+}, { timestamps: true });
 
 const Conversation = mongoose.model("Conversation", conversationSchema);
 

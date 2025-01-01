@@ -14,7 +14,11 @@ const messageSchema = new mongoose.Schema(
     },
     content: {
       type: String,
-      required: true,
+      default: "",
+    },
+    imageUrl: { 
+      type: String, 
+      default: null 
     },
     sent_at: {
       type: Date,
@@ -32,6 +36,14 @@ const messageSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+// Custom validation to ensure either content or imageUrl is present
+messageSchema.pre("validate", function (next) {
+  if (!this.content && !this.imageUrl) {
+    return next(new Error("Message must contain either content or an image."));
+  }
+  next();
+});
 
 const Message = mongoose.model("Message", messageSchema);
 
