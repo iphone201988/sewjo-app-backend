@@ -80,7 +80,7 @@ export const GlobalPatternSearch = async (req, res, next) => {
     const limit = parseInt(req.query.limit) || 10;
     const page = parseInt(req.query.page) || 1;
     const search = req.query.search;
-    let qry = { isPublic: true };
+    let qry = { isPublic: false };
     if (search) {
       qry = {
         ...qry,
