@@ -121,6 +121,9 @@ const fabricSchema = new mongoose.Schema(
       // default: "",
       // require:true
     },
+    shrinkageCheck:{
+      type:Boolean,
+    },
     drape: {
       type: Number,
       default: 0,

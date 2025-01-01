@@ -125,6 +125,7 @@ export const updateFabricDetails = async (req, res, next) => {
     stretchWidth,
     stretchLength,
     shrinkage,
+    shrinkageCheck,
     drape,
     imperfection,
     shope,
@@ -270,6 +271,7 @@ export const updateFabricDetails = async (req, res, next) => {
   if(linkStitchlog){
     fabric.linkStitchlog = linkStitchlog;
   }
+  fabric.shrinkageCheck = shrinkageCheck;
   history = await History.find({
     productRef: fabric._id,
   }).sort({ createdAt: -1 });
