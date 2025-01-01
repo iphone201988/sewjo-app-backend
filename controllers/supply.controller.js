@@ -80,7 +80,7 @@ export const getSupplyDetails = async (req, res, next) => {
 export const getAllSupplies = async (req, res, next) => {
   try {
     const userId = req.userId;
-    const supplies = await Supply.find({ userRef: userId });
+    const supplies = await Supply.find({ userRef: userId }).sort({ createdAt: -1 });
     if (!supplies) {
       return next(errorHandler(404, "No supplies found for this user!"));
     }

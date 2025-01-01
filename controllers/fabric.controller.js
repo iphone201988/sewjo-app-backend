@@ -76,7 +76,7 @@ export const getAllFabric = async (req, res, next) => {
     const userId = req.userId;
     const fabric = await Fabric.find({
       userRef: userId,
-    });
+    }).sort({ createdAt: -1 });
     if (!fabric) {
       return next(errorHandler(404, "Fabric not found!"));
     }

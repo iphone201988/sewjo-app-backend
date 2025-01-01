@@ -55,7 +55,7 @@ export const getPatternDetails = async (req, res, next) => {
 export const getAllPattern = async (req, res, next) => {
   const userId = req.userId;
   try {
-    const patterns = await Pattern.find({ userRef: userId });
+    const patterns = await Pattern.find({ userRef: userId }).sort({ createdAt: -1 });
     if (!patterns) {
       return next(errorHandler(404, "Patterns not found"));
     }
