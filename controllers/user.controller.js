@@ -121,6 +121,7 @@ export const updateUser = async (req, res, next) => {
     skillLevel,
     preferredSewingStyles,
     sewingMachinesAndTools,
+    isPrivate
   } = req.body;
   try {
     const user = await User.findOne({ _id: req.userId });
@@ -171,12 +172,16 @@ export const updateUser = async (req, res, next) => {
     if (skillLevel) {
       user.skillLevel = skillLevel;
     }
+
     if (preferredSewingStyles) {
       user.preferredSewingStyles = preferredSewingStyles;
     }
     if (sewingMachinesAndTools) {
       user.sewingMachinesAndTools = sewingMachinesAndTools;
     }
+    
+    user.isPrivate = isPrivate;
+
     const restDetails = await user.save();
 
     restDetails.password = undefined;

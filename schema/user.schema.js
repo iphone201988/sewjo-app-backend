@@ -86,5 +86,6 @@ export const updateProfileSchema = {
     skillLevel: Joi.string().optional(),
     preferredSewingStyles: Joi.array().items(Joi.string()).optional(),
     sewingMachinesAndTools: Joi.string().optional(),
+    isPrivate: Joi.boolean().optional(),
   }),
 };

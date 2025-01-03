@@ -8,7 +8,7 @@ import {
 
 export const signup = async (req, res, next) => {
   const { email, password } = req.body;
-
+  
   try {
     const existingUser = await User.findOne({ email });
     if (existingUser) {
@@ -120,7 +120,7 @@ export const googleLogin = async (req, res, next) => {
         success: true,
         message: "User created and logged in successfully!",
         user: {
-          id: newUser._id,
+          _id: newUser._id,
           email: newUser.email,
           displayName: newUser.displayName,
           access_token: token,
