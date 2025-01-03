@@ -67,6 +67,16 @@ const userSchema = new mongoose.Schema(
     deviceType: {
       type: Number, // 1 => IOS & 2 ANDROID & 3 WEB
     },
+    followers: {
+      type: [String],
+    },
+    following: {
+      type: [String],
+    },
+    isPrivate: {
+      type: Boolean,
+      default: false,
+    },
     isDeleted: {
       type: Boolean,
       default: false,

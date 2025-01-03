@@ -33,7 +33,7 @@ export const signup = async (req, res, next) => {
       success: true,
       message: "User created successfully!",
       user: {
-        id: newUser._id,
+        _id: newUser._id,
         email: newUser.email,
         displayName: newUser.displayName,
         access_token: token,
@@ -60,7 +60,7 @@ export const signin = async (req, res, next) => {
       success: true,
       message: "User login successfully!",
       user: {
-        id: validUser._id,
+        _id: validUser._id,
         email: validUser.email,
         displayName: validUser.displayName,
         access_token: token,
@@ -91,7 +91,7 @@ export const googleLogin = async (req, res, next) => {
         success: true,
         message: "Social login successfully!",
         user: {
-          id: user._id,
+          _id: user._id,
           email: user.email,
           displayName: user.displayName,
           access_token: token,
