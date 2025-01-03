@@ -73,6 +73,10 @@ export const updateCirclePostSchema = {
     postId: Joi.string().required(),
      }),
     body: Joi.object({
+      user: Joi.string().regex(objectIdRegex).required().messages({
+        "string.base": "Invalid user",
+        "string.pattern.base": "User must be a valid ObjectId",
+      }),
         title: Joi.string().max(100).optional().messages({
         "string.max": "Title is too long",
         "string.base": "Title must be a string",
